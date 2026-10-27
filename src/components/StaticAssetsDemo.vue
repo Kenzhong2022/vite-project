@@ -19,7 +19,7 @@ const publicDynamicUrl = `/${imageName}${ext}`
 // "Assets in public directory cannot be imported from JavaScript."
 //
 // import wrongImg from '/JapaneseCity.png'
-// 
+//
 // 原因：public 目录的资源不经过 Vite 的模块解析和打包流程，
 // 它们在构建后直接放到根目录，所以不能用 ES Module 的 import 语法引入。
 
@@ -33,6 +33,8 @@ import assetImage from '@/assets/JapaneseCity.png'
 
 <template>
   <div class="demo-container">
+    <h1>这是新版本内容！</h1>
+
     <h1 class="main-title">静态资源处理</h1>
     <p class="subtitle">
       <strong>public</strong> 目录资源使用全局变量拼接的方式；
@@ -69,7 +71,9 @@ const publicDynamicUrl = `/${imageName}${ext}`</code></pre>
       <h2 class="demo-title demo-error">❌ Demo 2: 错误 import public 资源（会导致 bug）</h2>
       <p class="demo-desc">
         public 目录的文件<strong>不能</strong>使用 ES Module 的 <code>import</code> 语法引入。
-        取消下面注释会报：<code>Assets in public directory cannot be imported from JavaScript.</code>
+        取消下面注释会报：<code
+          >Assets in public directory cannot be imported from JavaScript.</code
+        >
       </p>
 
       <div class="code-block error-block">
@@ -106,8 +110,8 @@ and get its resolved URL via import { assetUrl } from 'virtual:client/public/Jap
         <p>PNG 图片 (assets):</p>
         <img :src="assetImage" class="demo-img" alt="assets PNG" />
         <p class="hint">
-          ℹ️ 构建后 Vite 会自动给 assets 资源加上哈希后缀，
-          比如 <code>/assets/JapaneseCity.8f3a2b1c.png</code>
+          ℹ️ 构建后 Vite 会自动给 assets 资源加上哈希后缀， 比如
+          <code>/assets/JapaneseCity.8f3a2b1c.png</code>
         </p>
       </div>
     </section>
