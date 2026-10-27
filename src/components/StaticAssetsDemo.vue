@@ -33,8 +33,6 @@ import assetImage from '@/assets/JapaneseCity.png'
 
 <template>
   <div class="demo-container">
-    <h1>这是新版本内容！123</h1>
-
     <h1 class="main-title">静态资源处理</h1>
     <p class="subtitle">
       <strong>public</strong> 目录资源使用全局变量拼接的方式；
