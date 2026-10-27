@@ -13,15 +13,20 @@ const ext = '.png'
 const publicDynamicUrl = `/${imageName}${ext}`
 
 // ========================================
-// Demo 2: ❌ 错误示范 - import public 资源（已注释，取消注释会报错）
+// Demo 2: ❌ 错误示范 - import public 资源
 // ========================================
-// 以下代码取消注释会导致 Vite 报错：
+// Vite 8 (Rolldown) 不再硬报错，而是静默解析：把 import 的值
+// 替换成字面量 URL 字符串 "/JapaneseCity.png"。
+//
+// 看似能用，但这是一个 "绕过 Vite 资源处理" 的反模式：
+// ① 没有哈希 → 浏览器不会因文件名变化而刷新缓存
+// ② 不参与 code-splitting → 打包体积无法最优
+// ③ 绕过 Vite 压缩/优化 → public 文件原样复制一份到 dist
+//
+// Vite 7 及更早版本 (esbuild + rollup) 会直接中断 build：
 // "Assets in public directory cannot be imported from JavaScript."
-//
-// import wrongImg from '/JapaneseCity.png'
-//
-// 原因：public 目录的资源不经过 Vite 的模块解析和打包流程，
-// 它们在构建后直接放到根目录，所以不能用 ES Module 的 import 语法引入。
+import wrongImg from '/JapaneseCity.png'
+console.log('wrongImg =', wrongImg) // 运行时输出："/JapaneseCity.png"
 
 // ========================================
 // Demo 3: 正确引入 src/assets 目录资源
@@ -66,26 +71,61 @@ const publicDynamicUrl = `/${imageName}${ext}`</code></pre>
 
     <!-- Demo 2: public 错误用法 -->
     <section class="demo-section">
-      <h2 class="demo-title demo-error">❌ Demo 2: 错误 import public 资源（会导致 bug）</h2>
+      <h2 class="demo-title demo-error">❌ Demo 2: 错误 import public 资源（Vite 8 静默通过，但有隐患）</h2>
       <p class="demo-desc">
-        public 目录的文件<strong>不能</strong>使用 ES Module 的 <code>import</code> 语法引入。
-        取消下面注释会报：<code
-          >Assets in public directory cannot be imported from JavaScript.</code
-        >
+        Vite 8 底层换成了 Rolldown，不再硬报错，而是静默把这个 <code>import</code>
+        解析成字面量 URL：<code>wrongImg = "/JapaneseCity.png"</code>。
+        <br />
+        <strong>虽然 build 不中断、图片也能显示，但这仍然是错误的用法——它绕过了 Vite 的全部资源处理能力。</strong>
       </p>
 
       <div class="code-block error-block">
-        <pre><code>// ❌ 下面这行取消注释会直接报错
-// import wrongImg from '/JapaneseCity.png'</code></pre>
+        <p><strong>Script（真实代码，build 通过）：</strong></p>
+        <pre><code>import wrongImg from '/JapaneseCity.png'
+console.log('wrongImg =', wrongImg)
+// 运行时输出：wrongImg = /JapaneseCity.png</code></pre>
+        <p><strong>Template（真实使用）：</strong></p>
+        <pre><code>&lt;img :src="wrongImg" /&gt;</code></pre>
+      </div>
+
+      <div class="demo-output">
+        <p>错误 import 的图片（能显示，但有隐患）：</p>
+        <img :src="wrongImg" class="demo-img" alt="错误 import public 资源" />
+        <p class="hint">
+          打开浏览器控制台 (F12)，你会看到：<code>wrongImg = /JapaneseCity.png</code>
+        </p>
       </div>
 
       <div class="error-card">
         <p class="error-icon">🚫</p>
-        <p><strong>Vite 报错信息：</strong></p>
-        <pre><code>Assets in public directory cannot be imported from JavaScript.
-
-If you intend to import that asset, put it in src/assets/ instead,
-and get its resolved URL via import { assetUrl } from 'virtual:client/public/JapaneseCity.png'</code></pre>
+        <p><strong>为什么这是反模式？3 个隐患：</strong></p>
+        <p>
+          <strong>① 没有哈希 → 缓存失效依赖 reload</strong><br />
+          Vite 不会加内容哈希（如 <code>JapaneseCity-abc123.png</code>），
+          浏览器看到的永远是同一个 URL <code>/JapaneseCity.png</code>。
+          如果你有 version 检测 + 强制 reload，这个问题<strong>被大幅缓解</strong>；
+          但如果是纯 Vite 项目，用户换了 public 目录的文件却看不到更新，就是这个原因。
+          <br />
+          <em>（Vite 哈希是"URL 变了自然拉新"，version 检测是"强制绕过缓存"——思路不同）</em>
+        </p>
+        <p>
+          <strong>② 绕过 Vite 压缩/优化</strong><br />
+          Vite 不会压缩、转换、优化这张图——<code>public/</code> 里的文件原样复制到 dist。
+          而 <code>src/assets/</code> 里同名的 PNG 会被 Vite 处理，
+          <strong>dist 里两份 PNG，冗余占空间</strong>（可以在构建产物里验证）。
+        </p>
+        <p>
+          <strong>③ 不参与 code-splitting / 资源分析</strong><br />
+          Vite 的按需加载、动态 import 前缀分析、打包体积优化都基于
+          <strong>模块依赖图</strong>——而 public import 解析出来只是一个字符串，
+          不在依赖图里，高级优化手段对它全部失效。
+        </p>
+        <p style="margin-top: 12px; color: #666; font-size: 0.85rem;">
+          💡 Vite 7 及更早版本会直接中断 build：
+          <code>Assets in public directory cannot be imported from JavaScript.</code>
+          Vite 8 Rolldown 虽然放行了，但请始终用 <code>/xxx.png</code> 全局路径访问 public 资源，
+          把 <code>import</code> 留给 <code>src/assets/</code>。
+        </p>
       </div>
     </section>
 

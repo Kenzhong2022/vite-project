@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import StaticAssetsDemo from '@/components/StaticAssetsDemo.vue'
+import { Promotion, HomeFilled, Files, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
 
 const POLL_INTERVAL = 5 // 秒
 const remaining = ref(POLL_INTERVAL)
@@ -62,7 +62,38 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <StaticAssetsDemo />
+  <!-- 头部导航 Tab -->
+  <header class="app-header">
+    <div class="app-header-inner">
+      <div class="app-logo">
+        <el-icon class="app-logo-icon"><Promotion /></el-icon>
+        Vite Demo
+      </div>
+      <nav class="app-nav">
+        <router-link to="/" class="nav-link" exact-active-class="nav-link-active">
+          <el-icon><HomeFilled /></el-icon>
+          <span>首页</span>
+        </router-link>
+        <router-link to="/static-assets" class="nav-link" active-class="nav-link-active">
+          <el-icon><Files /></el-icon>
+          <span>静态资源</span>
+        </router-link>
+        <router-link to="/version-check" class="nav-link" active-class="nav-link-active">
+          <el-icon><RefreshRight /></el-icon>
+          <span>版本热更新</span>
+        </router-link>
+        <router-link to="/about" class="nav-link" active-class="nav-link-active">
+          <el-icon><InfoFilled /></el-icon>
+          <span>关于</span>
+        </router-link>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 页面内容 -->
+  <main class="app-main">
+    <router-view />
+  </main>
 
   <!-- 环境信息 + 版本检查 悬浮窗 -->
   <div class="env-panel" :class="{ expanded }" @click="expanded = !expanded">
@@ -113,6 +144,75 @@ onUnmounted(() => {
 </template>
 
 <style>
+/* ========== 全局布局 ========== */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 15, 22, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.app-header-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+}
+
+.app-logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.app-logo-icon {
+  font-size: 18px;
+  color: #7ee787;
+}
+
+.app-nav {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #999;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link:hover {
+  color: #ddd;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link-active {
+  color: #7ee787 !important;
+  background: rgba(126, 231, 135, 0.1);
+  font-weight: 500;
+}
+
+.app-main {
+  min-height: calc(100vh - 56px);
+  padding: 24px 0;
+}
+
+/* ========== 悬浮窗 ========== */
 .env-panel {
   position: fixed;
   right: 20px;
@@ -123,7 +223,6 @@ onUnmounted(() => {
   user-select: none;
 }
 
-/* ========== 折叠态 ========== */
 .env-panel-collapsed {
   display: flex;
   flex-direction: column;
@@ -173,7 +272,6 @@ onUnmounted(() => {
   color: #888;
 }
 
-/* ========== 展开态 ========== */
 .env-panel-expanded {
   width: 240px;
   background: rgba(22, 22, 30, 0.95);
