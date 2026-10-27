@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import { Promotion, HomeFilled, Files, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
+import { Promotion, HomeFilled, Files, Lightning, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
 
 const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
@@ -74,6 +74,9 @@ onUnmounted(() => {
         </router-link>
         <router-link to="/static-assets" class="nav-link" active-class="nav-link-active">
           <el-icon><Files /></el-icon><span>静态资源</span>
+        </router-link>
+        <router-link to="/pre-bundle" class="nav-link" active-class="nav-link-active">
+          <el-icon><Lightning /></el-icon><span>预构建</span>
         </router-link>
         <router-link to="/version-check" class="nav-link" active-class="nav-link-active">
           <el-icon><RefreshRight /></el-icon><span>版本热更新</span>

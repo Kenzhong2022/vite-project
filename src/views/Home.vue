@@ -9,25 +9,34 @@
     </p>
 
     <el-row :gutter="16">
-      <el-col :xs="24" :sm="12" :md="8">
+      <el-col :xs="24" :sm="12" :md="6">
         <el-card class="home-card" shadow="hover" @click="$router.push('/static-assets')">
           <template #header>
             <el-icon class="card-icon"><Files /></el-icon>
-            静态资源 Demo
+            静态资源
           </template>
-          <p>看 Vite 怎么处理 public、assets、动态拼接路径</p>
+          <p>public vs src/assets 的处理差异</p>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="12" :md="8">
+      <el-col :xs="24" :sm="12" :md="6">
+        <el-card class="home-card" shadow="hover" @click="$router.push('/pre-bundle')">
+          <template #header>
+            <el-icon class="card-icon"><Lightning /></el-icon>
+            预构建
+          </template>
+          <p>Native ESM vs Bundle 模式 + 预构建原理</p>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :md="6">
         <el-card class="home-card" shadow="hover" @click="$router.push('/version-check')">
           <template #header>
             <el-icon class="card-icon"><RefreshRight /></el-icon>
             版本热更新
           </template>
-          <p>package.json build 脚本改写 + 前端轮询 version.json</p>
+          <p>build 脚本改写 + 前端轮询 version.json</p>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="12" :md="8">
+      <el-col :xs="24" :sm="12" :md="6">
         <el-card class="home-card" shadow="hover" @click="$router.push('/about')">
           <template #header>
             <el-icon class="card-icon"><InfoFilled /></el-icon>
@@ -41,7 +50,7 @@
 </template>
 
 <script setup>
-import { Promotion, Files, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
+import { Promotion, Files, Lightning, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
 </script>
 
 <style scoped>
