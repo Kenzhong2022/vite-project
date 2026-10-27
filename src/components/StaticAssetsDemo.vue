@@ -33,7 +33,7 @@ import assetImage from '@/assets/JapaneseCity.png'
 
 <template>
   <div class="demo-container">
-    <h1>这是新版本内容！</h1>
+    <h1>这是新版本内容！123</h1>
 
     <h1 class="main-title">静态资源处理</h1>
     <p class="subtitle">
