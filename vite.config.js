@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
+      // 使用 import.meta.dirname 替代 __dirname (Vite 8 推荐写法)
+      '@': resolve(import.meta.dirname, 'src'),
     },
   },
 })
