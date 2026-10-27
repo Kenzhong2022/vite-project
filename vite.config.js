@@ -2,13 +2,14 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
-// https://vite.dev/config/
+// 屏蔽 Vite 8 的警告
+process.env.VITE_CONFIG_NATIVE_IGNORE_WARNING = 'true'
+
 export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      // 使用 import.meta.dirname 替代 __dirname (Vite 8 推荐写法)
-      '@': resolve(import.meta.dirname, 'src'),
+      '@': resolve(__dirname, 'src'), // 用 __dirname 保证 CF 能成功部署
     },
   },
 })
