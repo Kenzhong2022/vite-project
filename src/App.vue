@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { Promotion, HomeFilled, Files, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
 
-const POLL_INTERVAL = 5 // 秒
+const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
 const expanded = ref(false)
 
@@ -62,7 +62,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!-- 头部导航 Tab -->
   <header class="app-header">
     <div class="app-header-inner">
       <div class="app-logo">
@@ -71,87 +70,58 @@ onUnmounted(() => {
       </div>
       <nav class="app-nav">
         <router-link to="/" class="nav-link" exact-active-class="nav-link-active">
-          <el-icon><HomeFilled /></el-icon>
-          <span>首页</span>
+          <el-icon><HomeFilled /></el-icon><span>首页</span>
         </router-link>
         <router-link to="/static-assets" class="nav-link" active-class="nav-link-active">
-          <el-icon><Files /></el-icon>
-          <span>静态资源</span>
+          <el-icon><Files /></el-icon><span>静态资源</span>
         </router-link>
         <router-link to="/version-check" class="nav-link" active-class="nav-link-active">
-          <el-icon><RefreshRight /></el-icon>
-          <span>版本热更新</span>
+          <el-icon><RefreshRight /></el-icon><span>版本热更新</span>
         </router-link>
         <router-link to="/about" class="nav-link" active-class="nav-link-active">
-          <el-icon><InfoFilled /></el-icon>
-          <span>关于</span>
+          <el-icon><InfoFilled /></el-icon><span>关于</span>
         </router-link>
       </nav>
     </div>
   </header>
 
-  <!-- 页面内容 -->
   <main class="app-main">
     <router-view />
   </main>
 
-  <!-- 环境信息 + 版本检查 悬浮窗 -->
   <div class="env-panel" :class="{ expanded }" @click="expanded = !expanded">
-    <!-- 折叠视图：简洁状态 -->
     <div v-if="!expanded" class="env-panel-collapsed">
-      <span class="env-panel-badge" :class="{ prod: isProd, dev: !isProd }">
+      <el-tag :type="isProd ? 'warning' : 'success'" size="small" effect="plain">
         {{ isProd ? 'PROD' : 'DEV' }}
-      </span>
+      </el-tag>
       <span v-if="isProd" class="env-panel-tick">{{ remaining }}s</span>
-      <span v-else class="env-panel-hint">点击展开</span>
+      <span v-else class="env-panel-hint">展开</span>
     </div>
 
-    <!-- 展开视图：完整 env 信息 -->
     <div v-else class="env-panel-expanded" @click.stop>
       <div class="env-panel-header">
-        <span>Vite Env</span>
-        <button class="env-panel-close" @click="expanded = false">×</button>
+        <span>环境信息</span>
+        <el-button link size="small" @click="expanded = false">收起</el-button>
       </div>
-      <div class="env-rows">
-        <div class="env-row">
-          <span class="env-key">MODE</span>
-          <span class="env-val">{{ envInfo.MODE }}</span>
-        </div>
-        <div class="env-row">
-          <span class="env-key">BASE_URL</span>
-          <span class="env-val env-val-code">{{ envInfo.BASE_URL }}</span>
-        </div>
-        <div class="env-row">
-          <span class="env-key">PROD</span>
-          <span class="env-val" :class="envInfo.PROD ? 'bool-true' : 'bool-false'">{{ envInfo.PROD }}</span>
-        </div>
-        <div class="env-row">
-          <span class="env-key">DEV</span>
-          <span class="env-val" :class="envInfo.DEV ? 'bool-true' : 'bool-false'">{{ envInfo.DEV }}</span>
-        </div>
-        <div class="env-row">
-          <span class="env-key">SSR</span>
-          <span class="env-val" :class="envInfo.SSR ? 'bool-true' : 'bool-false'">{{ envInfo.SSR }}</span>
-        </div>
-        <div v-if="isProd" class="env-divider"></div>
-        <div v-if="isProd" class="env-row">
-          <span class="env-key">下一次检查</span>
-          <span class="env-val env-val-tick">{{ remaining }}s</span>
-        </div>
-      </div>
+      <el-descriptions :column="1" size="small" border>
+        <el-descriptions-item label="MODE">{{ envInfo.MODE }}</el-descriptions-item>
+        <el-descriptions-item label="BASE_URL">{{ envInfo.BASE_URL }}</el-descriptions-item>
+        <el-descriptions-item label="PROD">{{ envInfo.PROD }}</el-descriptions-item>
+        <el-descriptions-item label="DEV">{{ envInfo.DEV }}</el-descriptions-item>
+        <el-descriptions-item label="SSR">{{ envInfo.SSR }}</el-descriptions-item>
+        <el-descriptions-item v-if="isProd" label="下一次检查">{{ remaining }}s</el-descriptions-item>
+      </el-descriptions>
     </div>
   </div>
 </template>
 
 <style>
-/* ========== 全局布局 ========== */
 .app-header {
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  background: #fff;
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(15, 15, 22, 0.92);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .app-header-inner {
@@ -161,14 +131,13 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 24px;
-  height: 56px;
+  height: 52px;
 }
 
 .app-logo {
   font-size: 15px;
   font-weight: 600;
-  color: #fff;
-  letter-spacing: 0.3px;
+  color: var(--el-text-color-primary);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -176,49 +145,47 @@ onUnmounted(() => {
 
 .app-logo-icon {
   font-size: 18px;
-  color: #7ee787;
+  color: var(--el-color-primary);
 }
 
 .app-nav {
   display: flex;
-  gap: 4px;
+  gap: 2px;
 }
 
 .nav-link {
   padding: 6px 14px;
   font-size: 13px;
-  color: #999;
+  color: var(--el-text-color-regular);
   text-decoration: none;
   border-radius: 6px;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s, background 0.15s;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
 .nav-link:hover {
-  color: #ddd;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
 }
 
 .nav-link-active {
-  color: #7ee787 !important;
-  background: rgba(126, 231, 135, 0.1);
+  color: var(--el-color-primary) !important;
+  background: var(--el-color-primary-light-9);
   font-weight: 500;
 }
 
 .app-main {
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 52px);
   padding: 24px 0;
 }
 
-/* ========== 悬浮窗 ========== */
 .env-panel {
   position: fixed;
   right: 20px;
   bottom: 20px;
   z-index: 9999;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   cursor: pointer;
   user-select: none;
 }
@@ -227,58 +194,32 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 10px 14px;
-  min-width: 72px;
-  background: rgba(30, 30, 40, 0.9);
-  backdrop-filter: blur(8px);
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  color: #fff;
-  transition: opacity 0.25s ease;
-}
-
-.env-panel:hover .env-panel-collapsed {
-  opacity: 0.85;
-}
-
-.env-panel-badge {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 1px 8px;
-  border-radius: 4px;
-  letter-spacing: 1px;
-}
-
-.env-panel-badge.prod {
-  background: rgba(255, 180, 80, 0.2);
-  color: #ffb450;
-}
-
-.env-panel-badge.dev {
-  background: rgba(126, 231, 135, 0.2);
-  color: #7ee787;
+  gap: 4px;
+  padding: 10px 16px;
+  background: #fff;
+  border: 1px solid var(--el-border-color);
+  border-radius: 8px;
+  box-shadow: var(--el-box-shadow-light);
 }
 
 .env-panel-tick {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: #7ee787;
+  color: var(--el-color-primary);
 }
 
 .env-panel-hint {
-  font-size: 10px;
-  color: #888;
+  font-size: 11px;
+  color: var(--el-text-color-secondary);
 }
 
 .env-panel-expanded {
-  width: 240px;
-  background: rgba(22, 22, 30, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  width: 260px;
+  background: #fff;
+  border: 1px solid var(--el-border-color);
+  border-radius: 8px;
+  box-shadow: var(--el-box-shadow);
   overflow: hidden;
 }
 
@@ -286,75 +227,9 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  font-size: 12px;
-  font-weight: 600;
-  color: #ddd;
-  letter-spacing: 0.5px;
-}
-
-.env-panel-close {
-  background: none;
-  border: none;
-  color: #888;
-  font-size: 16px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0 2px;
-}
-
-.env-panel-close:hover {
-  color: #fff;
-}
-
-.env-rows {
-  padding: 8px 14px 12px;
-}
-
-.env-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
-  font-size: 12px;
-}
-
-.env-key {
-  color: #888;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-}
-
-.env-val {
-  color: #e0e0e0;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-}
-
-.env-val-code {
-  color: #7ee787;
-  background: rgba(126, 231, 135, 0.1);
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.bool-true {
-  color: #7ee787;
-}
-
-.bool-false {
-  color: #666;
-}
-
-.env-val-tick {
-  color: #7ee787;
-  font-weight: 600;
-}
-
-.env-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  margin: 6px 0;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+  font-size: 13px;
+  font-weight: 500;
 }
 </style>
