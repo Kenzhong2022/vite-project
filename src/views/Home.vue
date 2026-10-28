@@ -41,7 +41,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { User, UserRole } from '@/types/user'
 import { Promotion, Files, Lightning, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
 </script>
 

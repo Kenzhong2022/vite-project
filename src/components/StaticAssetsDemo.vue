@@ -1,4 +1,7 @@
 <script setup>
+import wrongImg from '/JapaneseCity.png'
+import assetImage from '@/assets/JapaneseCity.png'
+
 // ========================================
 // Demo 1: 正确引入 public 目录资源
 // ========================================
@@ -14,13 +17,11 @@ const publicDynamicUrl = `/${imageName}${ext}`
 // 绕过 Vite 资源处理（无哈希、不优化、不参与依赖图）
 // Vite 7 (esbuild + rollup) 会硬报错：
 //   "Assets in public directory cannot be imported from JavaScript."
-import wrongImg from '/JapaneseCity.png'
 console.log('wrongImg =', wrongImg) // 运行时输出："/JapaneseCity.png"
 
 // ========================================
 // Demo 3: 正确引入 src/assets 目录资源
 // ========================================
-import assetImage from '@/assets/JapaneseCity.png'
 </script>
 
 <template>
