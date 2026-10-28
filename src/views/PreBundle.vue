@@ -121,12 +121,12 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
 
     <el-card class="page-card" shadow="never">
       <template #header>一句话总结</template>
-      <el-typography-paragraph>
+      <p class="desc">
         Vite 把"打包"的压力从服务器转移给浏览器，
         实现了<strong>极速冷启动</strong>和<strong>按需编译</strong>； 而"预构建"是让这套 Native ESM
         模式能够兼容现实世界里
         <strong>格式混杂 + 模块碎片化</strong>的第三方依赖。
-      </el-typography-paragraph>
+      </p>
     </el-card>
   </div>
 </template>
