@@ -39,7 +39,7 @@ onUnmounted(() => {
 
 <template>
   <div class="page">
-    <h1 class="page-title">🔄 版本热更新</h1>
+    <h1 class="page-title">版本热更新</h1>
     <p class="page-desc">用户不刷新页面也能感知到你发布了新版本。</p>
 
     <el-card class="page-card" shadow="never">
