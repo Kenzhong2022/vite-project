@@ -92,10 +92,11 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       <template #header>npm 依赖解析：裸模块导入 → URL 重写</template>
       <p class="desc">
         原生 ES 导入<strong>不支持裸模块导入</strong>——浏览器不认识
-        <code>'my-dep'</code> 这种 Node.js 风格的包名，直接抛错。
-        Vite 检测到源码中的裸模块导入后，会做两件事：
+        <code>'my-dep'</code> 这种 Node.js 风格的包名，直接抛错。 Vite
+        检测到源码中的裸模块导入后，会做两件事：
       </p>
-      <pre class="code">// 你写的源码
+      <pre class="code">
+// 你写的源码
 import { someMethod } from 'my-dep'
 
 // Vite 预构建 + 重写后，浏览器实际加载的
@@ -107,12 +108,13 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
             转成 ESM 格式 + 合并为单个文件，缓存到 <code>node_modules/.vite/deps/</code>
           </li>
           <li>
-            <strong>② 重写导入路径</strong>：把源码里的 <code>from 'my-dep'</code>
-            替换成浏览器能识别的完整 URL，<code>?v=</code> 查询参数是内容哈希，缓存策略最理想
+            <strong>② 重写导入路径</strong>：把源码里的
+            <code>from 'my-dep'</code> 替换成浏览器能识别的完整 URL，<code>?v=</code>
+            查询参数是内容哈希，缓存策略最理想
           </li>
         </ul>
       </el-alert>
-      <p class="desc" style="margin-top: 12px;">
+      <p class="desc" style="margin-top: 12px">
         这步预构建由 Rolldown 执行，使得 Vite 的冷启动时间比任何基于纯 JavaScript 的打包器都快得多。
       </p>
     </el-card>

@@ -1,6 +1,16 @@
 <script setup>
 import { onMounted, onUnmounted, ref, computed } from 'vue'
-import { Promotion, HomeFilled, Files, Lightning, RefreshRight, InfoFilled } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import {
+  Promotion,
+  HomeFilled,
+  Files,
+  Lightning,
+  Timer,
+  Sort,
+  RefreshRight,
+  InfoFilled,
+} from '@element-plus/icons-vue'
 
 const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
@@ -15,6 +25,14 @@ const envInfo = computed(() => ({
 }))
 
 const isProd = import.meta.env.PROD
+
+// keep-alive 的 include 名单由路由表决定：
+// 凡是路由 meta.keepAlive === true 的路由，其 name（与组件注入的 name 一致）进入缓存名单
+const router = useRouter()
+const keepAliveIncludes = router
+  .getRoutes()
+  .filter((r) => r.meta.keepAlive)
+  .map((r) => r.name)
 
 let pollTimer = null
 let countdownTimer = null
@@ -81,6 +99,12 @@ onUnmounted(() => {
         <router-link to="/version-check" class="nav-link" active-class="nav-link-active">
           <el-icon><RefreshRight /></el-icon><span>版本热更新</span>
         </router-link>
+        <router-link to="/plugin-order" class="nav-link" active-class="nav-link-active">
+          <el-icon><Sort /></el-icon><span>插件开发</span>
+        </router-link>
+        <router-link to="/keep-alive-test" class="nav-link" active-class="nav-link-active">
+          <el-icon><Timer /></el-icon><span>KeepAlive</span>
+        </router-link>
         <router-link to="/about" class="nav-link" active-class="nav-link-active">
           <el-icon><InfoFilled /></el-icon><span>关于</span>
         </router-link>
@@ -89,7 +113,11 @@ onUnmounted(() => {
   </header>
 
   <main class="app-main">
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <keep-alive :include="keepAliveIncludes">
+        <component :is="Component" />
+      </keep-alive>
+    </router-view>
   </main>
 
   <div class="env-panel" :class="{ expanded }" @click="expanded = !expanded">
@@ -112,7 +140,9 @@ onUnmounted(() => {
         <el-descriptions-item label="PROD">{{ envInfo.PROD }}</el-descriptions-item>
         <el-descriptions-item label="DEV">{{ envInfo.DEV }}</el-descriptions-item>
         <el-descriptions-item label="SSR">{{ envInfo.SSR }}</el-descriptions-item>
-        <el-descriptions-item v-if="isProd" label="下一次检查">{{ remaining }}s</el-descriptions-item>
+        <el-descriptions-item v-if="isProd" label="下一次检查"
+          >{{ remaining }}s</el-descriptions-item
+        >
       </el-descriptions>
     </div>
   </div>
@@ -162,7 +192,9 @@ onUnmounted(() => {
   color: var(--el-text-color-regular);
   text-decoration: none;
   border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
   display: flex;
   align-items: center;
   gap: 4px;

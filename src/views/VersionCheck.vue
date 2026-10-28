@@ -46,10 +46,11 @@ onUnmounted(() => {
       <template #header>① 修改 package.json 的 build 脚本</template>
       <p class="desc">
         执行 <code>vite build</code> 之前，先用一行 Node 命令往
-        <code>public/version.json</code> 写时间戳。
-        <code>public/</code> 里的文件会被 Vite 原样复制到 <code>dist/</code>。
+        <code>public/version.json</code> 写时间戳。 <code>public/</code> 里的文件会被 Vite
+        原样复制到 <code>dist/</code>。
       </p>
-      <pre class="code">"build": "node -e \"require('fs').writeFileSync('public/version.json', JSON.stringify({version: Date.now()}))\" && vite build"</pre>
+      <pre class="code">
+"build": "node -e \"require('fs').writeFileSync('public/version.json', JSON.stringify({version: Date.now()}))\" && vite build"</pre>
       <p class="desc small">
         产物示例：<code>public/version.json</code> → <code>{ "version": 1761547200000 }</code>
       </p>
@@ -61,7 +62,8 @@ onUnmounted(() => {
         在 <code>App.vue</code> 里，仅 <code>import.meta.env.PROD</code> 下每 5 秒 fetch 一次，
         与内存版本号对比，不一致就 <code>confirm()</code> 询问刷新。
       </p>
-      <pre class="code">async function checkVersion() {
+      <pre class="code">
+async function checkVersion() {
   const res = await fetch(`{BASE_URL}version.json?t=${Date.now()}`)
   const data = await res.json()
   if (currentVersion &amp;&amp; currentVersion !== data.version) {
@@ -70,9 +72,7 @@ onUnmounted(() => {
     }
   }
 }</pre>
-      <p class="desc small">
-        <code>?t=Date.now()</code> 用于绕过浏览器缓存。
-      </p>
+      <p class="desc small"><code>?t=Date.now()</code> 用于绕过浏览器缓存。</p>
     </el-card>
 
     <el-card class="block live" shadow="never">
@@ -99,10 +99,25 @@ onUnmounted(() => {
     <el-card class="block" shadow="never">
       <template #header>💡 为什么能绕过缓存？</template>
       <ul class="tips">
-        <li><strong>缓存策略由部署平台决定</strong>。<code>public/</code> 不加哈希 ≠ 不缓存。Cloudflare Pages / Netlify / Nginx 上，不带哈希的 public 文件通常被缓存 1 年（<code>max-age=31536000, immutable</code>）。</li>
-        <li><strong>version.json 靠 _headers 强制不缓存</strong>。<code>public/_headers</code> 只给 <code>/version.json</code> 和 <code>/index.html</code> 设了 <code>Cache-Control: no-cache, no-store, must-revalidate</code>，这才是每次都回源的原因。</li>
-        <li><strong>Cloudflare Workers 默认偏保守</strong>——所有静态资源（public 图片、Vite 带哈希资源）都被设成了 <code>max-age=0, must-revalidate</code>，每次都回源验证。这是 Workers 特例，不是通用规则。</li>
-        <li><strong>JS/CSS chunk 带哈希是另一条路</strong>——Vite 加哈希（如 <code>index-CKA8M2mX.js</code>），文件名变 = URL 变 = 浏览器自然拉新。</li>
+        <li>
+          <strong>缓存策略由部署平台决定</strong>。<code>public/</code> 不加哈希 ≠
+          不缓存。Cloudflare Pages / Netlify / Nginx 上，不带哈希的 public 文件通常被缓存 1
+          年（<code>max-age=31536000, immutable</code>）。
+        </li>
+        <li>
+          <strong>version.json 靠 _headers 强制不缓存</strong>。<code>public/_headers</code> 只给
+          <code>/version.json</code> 和 <code>/index.html</code> 设了
+          <code>Cache-Control: no-cache, no-store, must-revalidate</code>，这才是每次都回源的原因。
+        </li>
+        <li>
+          <strong>Cloudflare Workers 默认偏保守</strong>——所有静态资源（public 图片、Vite
+          带哈希资源）都被设成了 <code>max-age=0, must-revalidate</code>，每次都回源验证。这是
+          Workers 特例，不是通用规则。
+        </li>
+        <li>
+          <strong>JS/CSS chunk 带哈希是另一条路</strong>——Vite 加哈希（如
+          <code>index-CKA8M2mX.js</code>），文件名变 = URL 变 = 浏览器自然拉新。
+        </li>
       </ul>
     </el-card>
   </div>

@@ -1,15 +1,21 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import path from 'node:path'
+import vueRouteNamePlugin from './plugins/vue-route-name.js'
 
-// 屏蔽 Vite 8 的警告
-process.env.VITE_CONFIG_NATIVE_IGNORE_WARNING = 'true'
+// 项目根目录，ESM 下等价于 __dirname
+const rootDir = import.meta.dirname
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    vueRouteNamePlugin({
+      routesFile: path.resolve(rootDir, 'src/router/index.js'),
+    }),
+  ],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'), // 用 __dirname 保证 CF 能成功部署
+      '@': path.resolve(rootDir, 'src'),
     },
   },
 })

@@ -1,14 +1,6 @@
 <template>
   <div class="home">
-    <h1 class="page-title">
-      <el-icon><Promotion /></el-icon>
-      欢迎来到 Vite + Vue 3 示例站
-    </h1>
-    <p class="page-desc">
-      Vite + Vue 3 + Vue Router + Element Plus 搭建的演示项目。
-    </p>
-
-    <el-row :gutter="16">
+    <el-row :gutter="12">
       <el-col :xs="24" :sm="12" :md="6">
         <el-card class="home-card" shadow="hover" @click="$router.push('/static-assets')">
           <template #header>
@@ -75,9 +67,13 @@ import { Promotion, Files, Lightning, RefreshRight, InfoFilled } from '@element-
   font-size: 14px;
 }
 
+/* 垂直间距放在 flex 容器层：挂在卡片上的 margin-bottom 会被 height:100% + stretch 吞掉 */
+.home :deep(.el-row) {
+  row-gap: 12px;
+}
+
 .home-card {
   cursor: pointer;
-  margin-bottom: 16px;
   height: 100%;
 }
 
