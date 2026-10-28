@@ -38,6 +38,12 @@ const router = createRouter({
       meta: { title: 'KeepAlive 测试', keepAlive: true },
     },
     {
+      path: '/element-theme',
+      name: 'element-theme',
+      component: () => import('@/views/ElementTheme.vue'),
+      meta: { title: 'Element 主题色' },
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('@/views/About.vue'),

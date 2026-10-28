@@ -9,6 +9,7 @@ import {
   Timer,
   Sort,
   RefreshRight,
+  Brush,
   InfoFilled,
 } from '@element-plus/icons-vue'
 import EnvPanel from '@/components/EnvPanel.vue'
@@ -96,6 +97,9 @@ onUnmounted(() => {
         </router-link>
         <router-link to="/keep-alive-test" class="nav-link" active-class="nav-link-active">
           <el-icon><Timer /></el-icon><span>KeepAlive</span>
+        </router-link>
+        <router-link to="/element-theme" class="nav-link" active-class="nav-link-active">
+          <el-icon><Brush /></el-icon><span>主题色</span>
         </router-link>
         <router-link to="/about" class="nav-link" active-class="nav-link-active">
           <el-icon><InfoFilled /></el-icon><span>关于</span>
