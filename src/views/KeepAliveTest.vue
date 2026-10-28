@@ -33,7 +33,7 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
     <h1 class="page-title">KeepAlive 缓存测试</h1>
     <p class="page-desc">切到其他页再切回来，看 count 是否保持、日志走了哪个钩子。</p>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>计数器</template>
       <div class="counter-row">
         <span class="counter-num">{{ count }}</span>
@@ -45,14 +45,14 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
       </div>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>生命周期日志（新事件在最上）</template>
       <div class="log-list">
         <div v-for="item in logs" :key="item" class="log-item">{{ item }}</div>
       </div>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>
         规则依据（<a
           class="doc-link"
@@ -95,32 +95,6 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
 </template>
 
 <style scoped>
-.page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.page-title {
-  font-size: 22px;
-  margin: 0 0 6px;
-}
-
-.page-desc {
-  color: var(--el-text-color-secondary);
-  margin: 0 0 20px;
-  font-size: 14px;
-}
-
-.section {
-  margin-bottom: 16px;
-}
-
-.section :deep(.el-card__header) {
-  font-weight: 500;
-  font-size: 14px;
-}
-
 .counter-row {
   display: flex;
   align-items: center;
@@ -147,21 +121,6 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
   font-size: 12px;
   line-height: 1.9;
   color: var(--el-text-color-regular);
-}
-
-.desc {
-  color: var(--el-text-color-regular);
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.desc code {
-  background: var(--el-fill-color-light);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: var(--el-color-primary);
 }
 
 .doc-link {

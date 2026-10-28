@@ -42,7 +42,7 @@ onUnmounted(() => {
     <h1 class="page-title">🔄 版本热更新</h1>
     <p class="page-desc">用户不刷新页面也能感知到你发布了新版本。</p>
 
-    <el-card class="block" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>① 修改 package.json 的 build 脚本</template>
       <p class="desc">
         执行 <code>vite build</code> 之前，先用一行 Node 命令往
@@ -56,7 +56,7 @@ onUnmounted(() => {
       </p>
     </el-card>
 
-    <el-card class="block" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>② 前端轮询 version.json</template>
       <p class="desc">
         在 <code>App.vue</code> 里，仅 <code>import.meta.env.PROD</code> 下每 5 秒 fetch 一次，
@@ -75,7 +75,7 @@ async function checkVersion() {
       <p class="desc small"><code>?t=Date.now()</code> 用于绕过浏览器缓存。</p>
     </el-card>
 
-    <el-card class="block live" shadow="never">
+    <el-card class="page-card live" shadow="never">
       <template #header>③ 运行时状态</template>
       <el-alert v-if="!isProd" type="warning" :closable="false" show-icon>
         开发环境不会开启轮询（避免浪费 Dev Server 资源），build 部署后生效。
@@ -96,7 +96,7 @@ async function checkVersion() {
       </div>
     </el-card>
 
-    <el-card class="block" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>💡 为什么能绕过缓存？</template>
       <ul class="tips">
         <li>
@@ -124,69 +124,9 @@ async function checkVersion() {
 </template>
 
 <style scoped>
-.page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 24px;
-  color: var(--el-text-color-primary);
-}
-
-.page-title {
-  font-size: 22px;
-  margin: 0 0 6px;
-}
-
-.page-desc {
-  color: var(--el-text-color-secondary);
-  margin: 0 0 20px;
-  font-size: 14px;
-}
-
-.block {
-  margin-bottom: 16px;
-}
-
-.block :deep(.el-card__header) {
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.block.live {
+.page-card.live {
   border-color: var(--el-color-info-light-5);
   background: var(--el-color-info-light-9);
-}
-
-.desc {
-  color: var(--el-text-color-regular);
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.desc.small {
-  font-size: 12px;
-}
-
-.desc code,
-.tips code {
-  background: var(--el-fill-color-light);
-  border-radius: 3px;
-  padding: 1px 5px;
-  font-size: 12px;
-  color: var(--el-color-primary);
-}
-
-.code {
-  background: var(--el-fill-color);
-  border-radius: 6px;
-  padding: 12px 16px;
-  overflow-x: auto;
-  margin: 0 0 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  color: var(--el-text-color-primary);
 }
 
 .status-grid {

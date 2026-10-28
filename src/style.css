@@ -1,0 +1,65 @@
+/* ========= 页面壳层：所有 view 统一使用 ========= */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+  color: var(--el-text-color-primary);
+}
+
+.page-title {
+  font-size: 22px;
+  margin: 0 0 6px;
+}
+
+.page-desc {
+  color: var(--el-text-color-secondary);
+  margin: 0 0 20px;
+  font-size: 14px;
+}
+
+/* 内容 section 卡片 */
+.page-card {
+  margin-bottom: 16px;
+}
+
+.page .el-card__header {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* ========= 正文排版 ========= */
+.desc {
+  color: var(--el-text-color-regular);
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.desc.small {
+  font-size: 12px;
+}
+
+/* 行内代码 */
+.desc code,
+.bullets code,
+.tips code {
+  background: var(--el-fill-color-light);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--el-color-primary);
+}
+
+/* 代码块 */
+.code {
+  background: var(--el-fill-color);
+  border-radius: 6px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  margin: 0 0 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  color: var(--el-text-color-primary);
+}

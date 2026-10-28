@@ -1,20 +1,20 @@
 <template>
   <div class="page">
-    <h1 class="title">插件开发：执行顺序与 enforce</h1>
-    <p class="subtitle">
+    <h1 class="page-title">插件开发：执行顺序与 enforce</h1>
+    <p class="page-desc">
       以本项目的 <code>plugins/vue-route-name.js</code> 为例，说明自定义插件为什么会被
       <code>@vitejs/plugin-vue</code> 影响，以及 <code>enforce: 'pre'</code> 如何解决。
     </p>
 
     <!-- ① 插件想做什么 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>① 自定义插件想做什么</template>
       <p class="desc">
         <code>vue-route-name</code> 在 <code>buildStart</code> 时解析路由表，建立
         「组件绝对路径 → 路由 name」的映射；再在 <code>transform</code> 钩子里给命中的路由组件注入
         组件 name，让 <code>keep-alive</code> 的 <code>include</code> 能按名字匹配：
       </p>
-      <pre><code>// transform 收到 .vue 源码后：
+      <pre class="code"><code>// transform 收到 .vue 源码后：
 parse(code)                    // @vue/compiler-sfc 解析出 SFC 描述符
 descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
 → 顶部注入 defineOptions({ name: 'home' })</code></pre>
@@ -22,12 +22,12 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ② 被谁影响 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>② 它会被谁影响：plugin-vue 把 SFC 编译成 JS</template>
       <p class="desc">
         SFC 是 Vue 框架指定的文件格式，浏览器并不认识，必须先编译。官方链条：
       </p>
-      <pre><code>「必须交由 @vue/compiler-sfc 编译为标准的 JavaScript 和 CSS」
+      <pre class="code"><code>「必须交由 @vue/compiler-sfc 编译为标准的 JavaScript 和 CSS」
                                     —— cn.vuejs.org/guide/scaling-up/sfc
 
 「@vitejs/plugin-vue — Provides Vue 3 Single File Components support」
@@ -42,13 +42,13 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ③ 排错顺序的后果 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>③ 排错顺序会发生什么（实测）</template>
       <p class="desc">
         把 <code>enforce: 'pre'</code> 注释掉、且本插件在数组里排在 <code>vue()</code> 之后，
         再执行 <code>npm run build</code>：
       </p>
-      <pre><code>vue() 先跑 → Home.vue 已被编译成纯 JS 渲染代码
+      <pre class="code"><code>vue() 先跑 → Home.vue 已被编译成纯 JS 渲染代码
 → 本插件 transform 的 code 不再是 SFC
 → parse() 解析不出 scriptSetup → 静默跳过注入</code></pre>
       <el-alert
@@ -65,7 +65,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ④ Vite 的排序规则 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>④ Vite 如何决定插件执行顺序</template>
       <p class="desc">
         Vite 先按 <code>enforce</code> 字段把插件分桶，再在<strong>同一桶内</strong>按数组顺序执行：
@@ -89,9 +89,9 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ⑤ 解法 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>⑤ 关键字段：enforce: 'pre'</template>
-      <pre><code>return {
+      <pre class="code"><code>return {
   name: 'vite-plugin-vue-route-name',
   enforce: 'pre',   // 唯一的顺序保证：永远排在 plugin-vue 之前
   transform(code, id) { ... },
@@ -103,9 +103,9 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ⑥ 最终闭环 -->
-    <el-card shadow="never" class="block">
+    <el-card shadow="never" class="page-card">
       <template #header>⑥ 最终闭环：keep-alive 的 include 生效</template>
-      <pre><code>路由表 meta.keepAlive: true
+      <pre class="code"><code>路由表 meta.keepAlive: true
   ↓ 自动推导（App.vue）
 keepAliveIncludes = ['keep-alive-test', 'about']
   ↓ include 按组件 name 匹配
@@ -121,41 +121,6 @@ enforce: 'pre' 保证插件在编译前注入 defineOptions({ name: 'keep-alive-
 </template>
 
 <style scoped>
-.page {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-.title {
-  font-size: 22px;
-  margin: 0 0 6px;
-}
-.subtitle {
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin: 0 0 20px;
-}
-.block {
-  margin-bottom: 16px;
-}
-.desc {
-  color: var(--el-text-color-regular);
-  font-size: 13px;
-  line-height: 1.7;
-  margin: 0 0 12px;
-}
-pre {
-  background: var(--el-fill-color);
-  border-radius: 6px;
-  padding: 12px 16px;
-  font-size: 12.5px;
-  line-height: 1.6;
-  overflow-x: auto;
-  margin: 0 0 12px;
-}
-code {
-  font-family: Consolas, Monaco, monospace;
-}
 .pipeline {
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="page">
     <el-row :gutter="12">
       <el-col :xs="24" :sm="12" :md="6">
         <el-card class="home-card" shadow="hover" @click="$router.push('/static-assets')">
@@ -46,29 +46,8 @@ import { Promotion, Files, Lightning, RefreshRight, InfoFilled } from '@element-
 </script>
 
 <style scoped>
-.home {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.page-title {
-  font-size: 22px;
-  margin: 0 0 6px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--el-text-color-primary);
-}
-
-.page-desc {
-  color: var(--el-text-color-secondary);
-  margin: 0 0 24px;
-  font-size: 14px;
-}
-
 /* 垂直间距放在 flex 容器层：挂在卡片上的 margin-bottom 会被 height:100% + stretch 吞掉 */
-.home :deep(.el-row) {
+.page :deep(.el-row) {
   row-gap: 12px;
 }
 

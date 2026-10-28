@@ -10,7 +10,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       为什么 Vite 在开发模式下把代码视为<strong>原生 ES 模块</strong>，又为什么还要"预构建"？
     </p>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>浏览器原生支持 ESM 是前提</template>
       <p class="desc">
         在浏览器还不认识 ESM 的年代，Webpack 等打包工具必须递归解析所有模块， 融合成一个 Bundle
@@ -23,7 +23,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
     </el-card>
 
     <!-- 对比图 -->
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>两种开发模式对比</template>
       <el-row :gutter="16">
         <el-col :xs="24" :md="12">
@@ -45,7 +45,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       </el-row>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>按需编译 + 极速 HMR</template>
       <p class="desc">
         Vite 服务器启动时<strong>不提前打包</strong>，把入口 HTML 直接扔给浏览器。 浏览器解析
@@ -63,7 +63,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       </p>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>那为什么还需要"预构建"？</template>
       <el-alert type="warning" :closable="false" show-icon title="两个现实难题">
         <ul class="bullets">
@@ -88,7 +88,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       </p>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>npm 依赖解析：裸模块导入 → URL 重写</template>
       <p class="desc">
         原生 ES 导入<strong>不支持裸模块导入</strong>——浏览器不认识
@@ -119,7 +119,7 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
       </p>
     </el-card>
 
-    <el-card class="section" shadow="never">
+    <el-card class="page-card" shadow="never">
       <template #header>一句话总结</template>
       <el-typography-paragraph>
         Vite 把"打包"的压力从服务器转移给浏览器，
@@ -132,48 +132,6 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
 </template>
 
 <style scoped>
-.page {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
-  color: var(--el-text-color-primary);
-}
-
-.page-title {
-  font-size: 22px;
-  margin: 0 0 6px;
-}
-
-.page-desc {
-  color: var(--el-text-color-secondary);
-  margin: 0 0 20px;
-  font-size: 14px;
-}
-
-.section {
-  margin-bottom: 16px;
-}
-
-.section :deep(.el-card__header) {
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.desc {
-  color: var(--el-text-color-regular);
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.desc code {
-  background: var(--el-fill-color-light);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: var(--el-color-primary);
-}
-
 .bullets {
   margin: 0;
   padding-left: 20px;
@@ -186,27 +144,6 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
 }
 
 .bullets strong {
-  color: var(--el-text-color-primary);
-}
-
-.bullets code {
-  background: var(--el-fill-color-light);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: var(--el-color-primary);
-}
-
-.code {
-  background: var(--el-fill-color);
-  border-radius: 6px;
-  padding: 12px 16px;
-  overflow-x: auto;
-  margin: 0 0 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-wrap;
   color: var(--el-text-color-primary);
 }
 
