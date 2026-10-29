@@ -11,11 +11,19 @@ import {
   Sort,
   RefreshRight,
   Brush,
+  Connection,
   InfoFilled,
 } from '@element-plus/icons-vue'
 
 export const navItems = [
-  { to: '/', icon: HomeFilled, label: '首页', exact: true, category: '项目基础' },
+  {
+    to: '/',
+    icon: HomeFilled,
+    label: '首页',
+    exact: true,
+    desc: '项目总览：全部实验页面的分组导航',
+    category: '项目基础',
+  },
   {
     to: '/static-assets',
     icon: Files,
@@ -37,9 +45,34 @@ export const navItems = [
     desc: 'build 脚本改写 + 前端轮询 version.json',
     category: 'Vite',
   },
-  { to: '/plugin-order', icon: Sort, label: '插件开发', category: 'Vite' },
-  { to: '/keep-alive-test', icon: Timer, label: 'KeepAlive', category: 'Vue3' },
-  { to: '/element-theme', icon: Brush, label: '主题色', category: 'Element Plus' },
+  {
+    to: '/plugin-order',
+    icon: Sort,
+    label: '插件开发',
+    desc: '自定义 Vite 插件 + 钩子执行顺序验证',
+    category: 'Vite',
+  },
+  {
+    to: '/keep-alive-test',
+    icon: Timer,
+    label: 'KeepAlive',
+    desc: '组件缓存：include 名单与生命周期表现',
+    category: 'Vue3',
+  },
+  {
+    to: '/element-theme',
+    icon: Brush,
+    label: '主题色',
+    desc: 'CSS 变量换肤：色阶按官方规则自动生成',
+    category: 'Element Plus',
+  },
+  {
+    to: '/composables',
+    icon: Connection,
+    label: '组合式函数',
+    desc: '有状态逻辑复用：ref vs reactive 返回值对比',
+    category: 'Vue3',
+  },
   {
     to: '/about',
     icon: InfoFilled,

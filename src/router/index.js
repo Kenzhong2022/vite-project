@@ -8,6 +8,7 @@ import { sections as versionCheckSections } from '@/views/VersionCheck.vue'
 import { sections as pluginOrderSections } from '@/views/PluginOrder.vue'
 import { sections as keepAliveSections } from '@/views/KeepAliveTest.vue'
 import { sections as elementThemeSections } from '@/views/ElementTheme.vue'
+import { sections as composablesSections } from '@/views/ComposablesDemo.vue'
 import { sections as aboutSections } from '@/views/About.vue'
 
 const router = createRouter({
@@ -51,6 +52,12 @@ const router = createRouter({
       name: 'element-theme',
       component: () => import('@/views/ElementTheme.vue'),
       meta: { title: 'Element 主题色', toc: elementThemeSections },
+    },
+    {
+      path: '/composables',
+      name: 'composables',
+      component: () => import('@/views/ComposablesDemo.vue'),
+      meta: { title: '组合式函数', toc: composablesSections },
     },
     {
       path: '/about',
