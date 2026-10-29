@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { onMounted, onActivated, onDeactivated, onUnmounted } from 'vue'
+import SectionCard from '@/components/SectionCard.vue'
+// 章节数据单一来源：卡片 header、侧边目录都由它构建（本页无 strong 分点）
+import { createSectionMap } from '@/utils/sections'
+
+const s = createSectionMap(sections)
 
 const count = ref(0)
 const logs = ref([])
@@ -33,8 +38,7 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
     <h1 class="page-title">KeepAlive 缓存测试</h1>
     <p class="page-desc">切到其他页再切回来，看 count 是否保持、日志走了哪个钩子。</p>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>计数器</template>
+    <SectionCard :section="s.counter">
       <div class="counter-row">
         <span class="counter-num">{{ count }}</span>
         <div class="counter-btns">
@@ -43,16 +47,16 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
           <el-button plain @click="reset">清零</el-button>
         </div>
       </div>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>生命周期日志（新事件在最上）</template>
+    <SectionCard :section="s.logs">
       <div class="log-list">
         <div v-for="item in logs" :key="item" class="log-item">{{ item }}</div>
       </div>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
+    <!-- header 覆写为带官方文档链接，目录章节名仍取数据里的 title -->
+    <SectionCard :section="s.rules">
       <template #header>
         规则依据（<a
           class="doc-link"
@@ -90,7 +94,7 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
         （所以首次进入页面日志有两条）；<code>onDeactivated</code> 在组件真正卸载时也会调用。
         这两个钩子对缓存树中的后代组件同样生效。
       </p>
-    </el-card>
+    </SectionCard>
   </div>
 </template>
 
@@ -132,3 +136,13 @@ log('setup() 执行 —— 每次「重新激活」不会重跑，仅首次')
   text-decoration: underline;
 }
 </style>
+<script>
+// 章节数据单一来源：卡片 header 与侧边目录（router meta.toc，见 router/index.js）都由它构建；
+// script setup 可直接引用这里的顶层声明（编译后同属一个模块）
+// 「规则依据」卡片 header 带官方文档链接，页面通过 SectionCard 的 #header 覆写，目录仍取这里的 title
+export const sections = [
+  { key: 'counter', title: '计数器' },
+  { key: 'logs', title: '生命周期日志（新事件在最上）' },
+  { key: 'rules', title: '规则依据' },
+]
+</script>

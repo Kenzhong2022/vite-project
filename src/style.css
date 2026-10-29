@@ -20,6 +20,8 @@
 /* 内容 section 卡片 */
 .page-card {
   margin-bottom: 16px;
+  /* 锚点定位时给吸顶头部留出空间（52px 头部 + 20px 呼吸） */
+  scroll-margin-top: 72px;
 }
 
 .page .el-card__header {
@@ -78,4 +80,24 @@
   line-height: 1.5;
   white-space: pre-wrap;
   color: var(--el-text-color-primary);
+}
+
+/* 卡片内子章节标题（SectionCard 由 children 数据渲染，锚点 id = 子章节 key） */
+.sub-title {
+  scroll-margin-top: 72px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--el-text-color-primary);
+  margin: 8px 0 12px;
+}
+
+.sub-title:not(:first-of-type) {
+  margin-top: 24px;
+}
+
+/* 侧边目录（el-anchor）标题行：图标与文字对齐 */
+.anchor-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }

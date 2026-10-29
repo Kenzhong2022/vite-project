@@ -2,7 +2,6 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import EnvPanel from '@/components/EnvPanel.vue'
-import TocTree from '@/components/TocTree.vue'
 import { navItems } from '@/config/navigation.js'
 
 const POLL_INTERVAL = 5
@@ -19,7 +18,10 @@ const keepAliveIncludes = router
   .map((r) => r.name)
 
 const route = useRoute()
-// 侧边目录：数据来自当前路由的 meta.toc（结构见 TocTree.vue），未配置的页面自动隐藏
+// 侧边目录：来自当前路由 meta.toc（页面章节数据的单一来源，见各页 *Sections.js）
+// 目录 ↔ 卡片的双向关联交给 el-anchor（点击滚动 + 滚动高亮都是组件内建行为）：
+// offset/bound = 72px 对齐吸顶头部（52px）+ 呼吸空间，与 .page-card 的 scroll-margin-top 一致；
+// 卡片锚点 id 由 SectionCard 用 section.key 渲染
 const tocSections = computed(() => route.meta.toc || [])
 
 let pollTimer = null
@@ -72,7 +74,7 @@ onUnmounted(() => {
     <div class="app-header-inner">
       <div class="app-logo">
         <div class="app-logo-icon"><img src="/favicon.svg" /></div>
-        Vite
+        <div style="color: var(--el-color-primary)">Vite</div>
       </div>
       <nav class="app-nav">
         <router-link
@@ -99,7 +101,25 @@ onUnmounted(() => {
         </router-view>
       </div>
       <aside v-if="tocSections.length" class="app-toc">
-        <TocTree :sections="tocSections" />
+        <el-anchor :offset="72" :bound="72">
+          <el-anchor-link v-for="sec in tocSections" :key="sec.key" :href="`#${sec.key}`">
+            <!-- element-plus 2.14 的 anchor-link：标题内容走 default slot（无 #title slot），
+                 子链接走 #sub-link slot；title prop 只是 default slot 的 fallback -->
+            <span class="anchor-row">
+              <el-icon v-if="sec.icon"><component :is="sec.icon" /></el-icon>
+              {{ sec.title }}
+            </span>
+            <!-- 子章节：既有锚点也有内容，独立定位与高亮 -->
+            <template #sub-link>
+              <el-anchor-link
+                v-for="sub in sec.children"
+                :key="sub.key"
+                :href="`#${sub.key}`"
+                :title="sub.title"
+              />
+            </template>
+          </el-anchor-link>
+        </el-anchor>
       </aside>
     </div>
   </main>
@@ -117,7 +137,7 @@ onUnmounted(() => {
 }
 
 .app-header-inner {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -133,11 +153,17 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+  height: 100%;
 }
 
 .app-logo-icon {
-  font-size: 18px;
-  color: var(--el-color-primary);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.app-logo-icon img {
+  height: 80%;
 }
 
 .app-nav {
@@ -167,7 +193,6 @@ onUnmounted(() => {
 .nav-link-active {
   color: var(--el-color-primary) !important;
   background: var(--el-color-primary-light-9);
-  font-weight: 500;
 }
 
 .app-main {

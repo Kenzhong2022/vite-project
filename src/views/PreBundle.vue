@@ -1,6 +1,13 @@
 <script setup>
 import BundleBasedImg from '@/assets/BasedBundle.png'
 import ESMBasedImg from '@/assets/BasedESM.png'
+import SectionCard from '@/components/SectionCard.vue'
+import SectionHeading from '@/components/SectionHeading.vue'
+// 章节数据单一来源：卡片 header、strong 分点、侧边目录都由它构建
+import { createSectionMap } from '@/utils/sections'
+
+// 卡片显式排列、正文自由编写；章节树已展平，子章节 key 也能直接取
+const s = createSectionMap(sections)
 </script>
 
 <template>
@@ -10,8 +17,7 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       为什么 Vite 在开发模式下把代码视为<strong>原生 ES 模块</strong>，又为什么还要"预构建"？
     </p>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>浏览器原生支持 ESM 是前提</template>
+    <SectionCard :section="s.esm">
       <p class="desc">
         在浏览器还不认识 ESM 的年代，Webpack 等打包工具必须递归解析所有模块， 融合成一个 Bundle
         浏览器才能运行。<strong>现在现代浏览器原生支持 ES 模块</strong>—— 浏览器自己能解析
@@ -20,11 +26,9 @@ import ESMBasedImg from '@/assets/BasedESM.png'
       <p class="desc">
         既然浏览器自己能干"模块加载"，Vite 就不需要再替浏览器"预先把所有模块合成一个文件"了。
       </p>
-    </el-card>
+    </SectionCard>
 
-    <!-- 对比图 -->
-    <el-card class="page-card" shadow="never">
-      <template #header>两种开发模式对比</template>
+    <SectionCard :section="s.compare">
       <el-row :gutter="16">
         <el-col :xs="24" :md="12">
           <div class="img-box">
@@ -43,10 +47,9 @@ import ESMBasedImg from '@/assets/BasedESM.png'
           </div>
         </el-col>
       </el-row>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>按需编译 + 极速 HMR</template>
+    <SectionCard :section="s.ondemand">
       <p class="desc">
         Vite 服务器启动时<strong>不提前打包</strong>，把入口 HTML 直接扔给浏览器。 浏览器解析
         <code>import</code> 后发起请求，Vite 才开始干活：
@@ -61,23 +64,25 @@ import ESMBasedImg from '@/assets/BasedESM.png'
         只需要让浏览器<strong>重新请求这一个模块</strong>（加上受影响的边界），
         而不是"牵一发而动全身"重建整个 Bundle——这就是<strong>精准且极速的 HMR</strong>。
       </p>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>那为什么还需要"预构建"？</template>
-      <el-alert type="warning" :closable="false" show-icon title="两个现实难题">
-        <ul class="bullets">
-          <li>
-            <strong>第三方包格式不统一</strong>：<code>node_modules</code> 里很多是 CommonJS / UMD，
-            浏览器不认识 ESM 的 <code>import</code> / <code>export</code> 语法。
-          </li>
-          <li>
-            <strong>碎片化模块引发请求风暴</strong>：像 lodash-es 这种包里有几百个微型模块，
-            如果让浏览器直接发请求，瞬间几百个 HTTP 请求拖垮网络。
-          </li>
-        </ul>
-      </el-alert>
-      <p class="desc" style="margin-top: 12px">
+    <!-- 父章节：无正文，仅作分组锚点（标题条） -->
+    <SectionHeading :section="s.why" />
+
+    <!-- 子章节：锚点 + 内容 -->
+    <SectionCard :section="s['why-format']">
+      <p class="desc">
+        <code>node_modules</code> 里很多是 CommonJS / UMD，浏览器不认识 ESM 的 <code>import</code> /
+        <code>export</code> 语法。
+      </p>
+    </SectionCard>
+
+    <SectionCard :section="s['why-storm']">
+      <p class="desc">
+        像 lodash-es 这种包里有几百个微型模块，如果让浏览器直接发请求，瞬间几百个 HTTP
+        请求拖垮网络。
+      </p>
+      <p class="desc">
         所以 Vite 必须在服务器启动或首次请求时，用 esbuild（Vite 7+）或 Rolldown（Vite 8）
         把第三方依赖<strong>提前转成 ESM</strong> 并<strong>合并为单个文件</strong>。
         这就是"预构建"——在 Native ESM 模式下，为了让第三方库也能顺畅运行而打的补丁。
@@ -86,10 +91,9 @@ import ESMBasedImg from '@/assets/BasedESM.png'
         预构建产物默认缓存在 <code>node_modules/.vite</code>，只有依赖变化、锁文件变化或
         手动删除目录时才会重新执行。
       </p>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>npm 依赖解析：裸模块导入 → URL 重写</template>
+    <SectionCard :section="s.resolve">
       <p class="desc">
         原生 ES 导入<strong>不支持裸模块导入</strong>——浏览器不认识
         <code>'my-dep'</code> 这种 Node.js 风格的包名，直接抛错。 Vite
@@ -117,17 +121,16 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
       <p class="desc" style="margin-top: 12px">
         这步预构建由 Rolldown 执行，使得 Vite 的冷启动时间比任何基于纯 JavaScript 的打包器都快得多。
       </p>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>一句话总结</template>
+    <SectionCard :section="s.summary">
       <p class="desc">
         Vite 把"打包"的压力从服务器转移给浏览器，
         实现了<strong>极速冷启动</strong>和<strong>按需编译</strong>； 而"预构建"是让这套 Native ESM
         模式能够兼容现实世界里
         <strong>格式混杂 + 模块碎片化</strong>的第三方依赖。
       </p>
-    </el-card>
+    </SectionCard>
   </div>
 </template>
 
@@ -149,3 +152,28 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
   line-height: 1.6;
 }
 </style>
+<script>
+// 章节数据单一来源：卡片 header 与侧边目录（router meta.toc，见 router/index.js）都由它构建；
+// script setup 可直接引用这里的顶层声明（编译后同属一个模块）
+// 结构约定：章节 { key, icon?, title, children? } —— key 即锚点 id（SectionCard 渲染在卡片根上）；
+// 有正文的章节由页面经 SectionCard 渲染，无正文的父章节是纯分组锚点，页面经 SectionHeading 渲染标题条；
+// 子章节 children[]: { key, title }，key 用 '父key-语义' 命名避免全局锚点冲突；
+// 卡片内 strong 标记的小点是正文内容，不是子章节，不进目录
+import { Monitor, Switch } from '@element-plus/icons-vue'
+
+export const sections = [
+  { key: 'esm', icon: Monitor, title: '浏览器原生支持 ESM 是前提' },
+  { key: 'compare', icon: Switch, title: '两种开发模式对比' },
+  { key: 'ondemand', title: '按需编译 + 极速 HMR' },
+  {
+    key: 'why',
+    title: '那为什么还需要"预构建"？',
+    children: [
+      { key: 'why-format', title: '难题一：第三方包格式不统一' },
+      { key: 'why-storm', title: '难题二：碎片化模块引发请求风暴' },
+    ],
+  },
+  { key: 'resolve', title: 'npm 依赖解析：裸模块导入 → URL 重写' },
+  { key: 'summary', title: '一句话总结' },
+]
+</script>

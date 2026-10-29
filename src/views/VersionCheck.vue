@@ -1,5 +1,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import SectionCard from '@/components/SectionCard.vue'
+// 章节数据单一来源：卡片 header、strong 分点、侧边目录都由它构建
+import { createSectionMap } from '@/utils/sections'
+
+const s = createSectionMap(sections)
 
 const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
@@ -42,8 +47,7 @@ onUnmounted(() => {
     <h1 class="page-title">版本热更新</h1>
     <p class="page-desc">用户不刷新页面也能感知到你发布了新版本。</p>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>① 修改 package.json 的 build 脚本</template>
+    <SectionCard :section="s.build">
       <p class="desc">
         执行 <code>vite build</code> 之前，先用一行 Node 命令往
         <code>public/version.json</code> 写时间戳。 <code>public/</code> 里的文件会被 Vite
@@ -54,10 +58,9 @@ onUnmounted(() => {
       <p class="desc small">
         产物示例：<code>public/version.json</code> → <code>{ "version": 1761547200000 }</code>
       </p>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>② 前端轮询 version.json</template>
+    <SectionCard :section="s.poll">
       <p class="desc">
         在 <code>App.vue</code> 里，仅 <code>import.meta.env.PROD</code> 下每 5 秒 fetch 一次，
         与内存版本号对比，不一致就 <code>confirm()</code> 询问刷新。
@@ -73,10 +76,9 @@ async function checkVersion() {
   }
 }</pre>
       <p class="desc small"><code>?t=Date.now()</code> 用于绕过浏览器缓存。</p>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card live" shadow="never">
-      <template #header>③ 运行时状态</template>
+    <SectionCard :section="s.runtime" class="live">
       <el-alert v-if="!isProd" type="warning" :closable="false" show-icon>
         开发环境不会开启轮询（避免浪费 Dev Server 资源），build 部署后生效。
       </el-alert>
@@ -94,10 +96,9 @@ async function checkVersion() {
           <span class="status-val mono">{{ lastError }}</span>
         </div>
       </div>
-    </el-card>
+    </SectionCard>
 
-    <el-card class="page-card" shadow="never">
-      <template #header>💡 为什么能绕过缓存？</template>
+    <SectionCard :section="s.cache">
       <ul class="bullets">
         <li>
           <strong>缓存策略由部署平台决定</strong>。<code>public/</code> 不加哈希 ≠
@@ -119,12 +120,13 @@ async function checkVersion() {
           <code>index-CKA8M2mX.js</code>），文件名变 = URL 变 = 浏览器自然拉新。
         </li>
       </ul>
-    </el-card>
+    </SectionCard>
   </div>
 </template>
 
 <style scoped>
-.page-card.live {
+/* SectionCard 经 fallthrough 附加的 live 类（scoped 样式需 :deep 穿透子组件根元素） */
+.page :deep(.live) {
   border-color: var(--el-color-info-light-5);
   background: var(--el-color-info-light-9);
 }
@@ -165,3 +167,14 @@ async function checkVersion() {
   color: var(--el-color-danger);
 }
 </style>
+<script>
+// 章节数据单一来源：卡片 header 与侧边目录（router meta.toc，见 router/index.js）都由它构建；
+// script setup 可直接引用这里的顶层声明（编译后同属一个模块）
+// 本页无子章节，卡片内 strong 小点属于正文
+export const sections = [
+  { key: 'build', title: '修改 package.json 的 build 脚本' },
+  { key: 'poll', title: '前端轮询 version.json' },
+  { key: 'runtime', title: '运行时状态' },
+  { key: 'cache', title: '为什么能绕过缓存？' },
+]
+</script>

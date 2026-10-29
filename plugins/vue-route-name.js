@@ -15,8 +15,8 @@ function normalizePath(p) {
 
 /**
  * 解析 import 说明符为完整绝对路径，分两步：
- * ① 去掉前缀：'@/xxx' 砍掉前 2 个字符得 'xxx'；'./xxx'、'../xxx' 原样保留
- * ② 拼接：把结果交给 path.resolve 拼成绝对路径
+ * 去掉前缀：'@/xxx' 砍掉前 2 个字符得 'xxx'；'./xxx'、'../xxx' 原样保留
+ * 拼接：把结果交给 path.resolve 拼成绝对路径
  *    - '@/' 开头的基于 src 目录（vite.config.js 里配置的别名指向 src）
  *    - './'、'../' 开头的基于路由文件所在目录
  *    - 其余（vue、element-plus 等裸模块）返回 null，由调用方跳过
@@ -26,8 +26,8 @@ function normalizePath(p) {
  * @returns {string | null} 绝对路径（未归一化），无法解析时为 null
  */
 function resolveSpec(spec, projectRoot, routesDir) {
-  let rel // ① 去掉前缀后的相对路径
-  let baseDir // ② 拼接所用的基准目录
+  let rel // 去掉前缀后的相对路径
+  let baseDir // 拼接所用的基准目录
   if (spec.startsWith('@/')) {
     rel = spec.slice(2)
     baseDir = path.resolve(projectRoot, 'src')
