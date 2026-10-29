@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { Monitor, Switch } from '@element-plus/icons-vue'
 import Home from '@/views/Home.vue'
 import StaticAssets from '@/views/StaticAssets.vue'
 
@@ -16,7 +17,24 @@ const router = createRouter({
       path: '/pre-bundle',
       name: 'pre-bundle',
       component: () => import('@/views/PreBundle.vue'),
-      meta: { title: '预构建' },
+      // meta.toc：侧边目录数据（结构见 components/TocTree.vue），不配置则该页不显示目录
+      meta: {
+        title: '预构建',
+        toc: [
+          { icon: Monitor, title: '原生 ESM 是前提' },
+          { icon: Switch, title: '两种开发模式对比' },
+          { title: '按需编译 + 极速 HMR' },
+          {
+            title: '为什么还需要"预构建"',
+            children: [{ title: '第三方包格式不统一' }, { title: '碎片化请求风暴' }],
+          },
+          {
+            title: 'npm 依赖解析',
+            children: [{ title: '① 预构建转 ESM' }, { title: '② 裸导入 URL 重写' }],
+          },
+          { title: '一句话总结' },
+        ],
+      },
     },
     {
       path: '/version-check',

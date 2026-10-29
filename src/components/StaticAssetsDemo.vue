@@ -25,7 +25,7 @@ console.log('wrongImg =', wrongImg) // 运行时输出："/JapaneseCity.png"
 </script>
 
 <template>
-  <div class="demo">
+  <div class="page">
     <h1 class="page-title">静态资源处理</h1>
     <p class="page-desc">
       <strong>public</strong> 目录用全局路径 <code>/xxx.png</code> 拼接；
@@ -33,10 +33,8 @@ console.log('wrongImg =', wrongImg) // 运行时输出："/JapaneseCity.png"
     </p>
 
     <!-- Demo 1 -->
-    <el-card class="section" shadow="never">
-      <template #header
-        ><span class="sec-title">✅ Demo 1：正确引入 public 目录资源</span></template
-      >
+    <el-card class="page-card" shadow="never">
+      <template #header>✅ Demo 1：正确引入 public 目录资源</template>
       <p class="desc">
         public 目录文件构建后原样复制到根目录，用 <code>/</code> 开头拼接路径访问。
       </p>
@@ -58,12 +56,8 @@ const publicDynamicUrl = `/${imageName}${ext}`  // 动态拼接也行</pre>
     </el-card>
 
     <!-- Demo 2 -->
-    <el-card class="section" shadow="never">
-      <template #header
-        ><span class="sec-title sec-error"
-          >❌ Demo 2：错误 import public 资源（Vite 8 静默通过）</span
-        ></template
-      >
+    <el-card class="page-card" shadow="never">
+      <template #header>❌ Demo 2：错误 import public 资源（Vite 8 静默通过）</template>
       <p class="desc">
         Rolldown 把 <code>import wrongImg from '/JapaneseCity.png'</code> 静默解析为字面量
         <code>wrongImg = "/JapaneseCity.png"</code>。build 不中断、图片能显示， 但这是反模式——绕过了
@@ -82,7 +76,7 @@ console.log('wrongImg =', wrongImg)  // "/JapaneseCity.png"</pre>
       </div>
 
       <el-alert type="error" :closable="false" show-icon title="3 个隐患">
-        <ul class="tips">
+        <ul class="bullets">
           <li><strong>无哈希</strong>：缓存失效依赖 reload，public/ 文件变了浏览器不一定能感知</li>
           <li>
             <strong>绕过优化</strong>：Vite 不压缩、不处理 public 文件，dist 里两份同名 PNG 冗余
@@ -95,10 +89,8 @@ console.log('wrongImg =', wrongImg)  // "/JapaneseCity.png"</pre>
     </el-card>
 
     <!-- Demo 3 -->
-    <el-card class="section" shadow="never">
-      <template #header
-        ><span class="sec-title sec-assets">📦 Demo 3：正确引入 src/assets 目录资源</span></template
-      >
+    <el-card class="page-card" shadow="never">
+      <template #header>📦 Demo 3：正确引入 src/assets 目录资源</template>
       <p class="desc">
         src/assets 文件被 Vite 打包处理，import 后得到带哈希的 URL （如
         <code>/assets/JapaneseCity-abc123.png</code>），缓存策略最理想。
@@ -115,8 +107,8 @@ console.log('wrongImg =', wrongImg)  // "/JapaneseCity.png"</pre>
     </el-card>
 
     <!-- 总结 -->
-    <el-card class="section" shadow="never">
-      <template #header><span class="sec-title">📝 总结对比</span></template>
+    <el-card class="page-card" shadow="never">
+      <template #header>📝 总结对比</template>
       <el-table :data="compareData" border size="small">
         <el-table-column prop="feature" label="特性" width="140" />
         <el-table-column prop="public" label="public 目录" />
@@ -151,70 +143,8 @@ export default {
 </script>
 
 <style scoped>
-.demo {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 24px;
-  color: var(--el-text-color-primary);
-}
-
-.page-title {
-  font-size: 22px;
-  margin: 0 0 6px;
-}
-
-.page-desc {
-  color: var(--el-text-color-secondary);
-  margin: 0 0 20px;
-  font-size: 14px;
-}
-
-.page-desc code,
-.desc code,
-.code code {
-  background: var(--el-fill-color-light);
-  padding: 1px 5px;
-  border-radius: 3px;
-  font-size: 12px;
-  color: var(--el-color-primary);
-}
-
-.section {
-  margin-bottom: 16px;
-}
-
-.sec-title {
-  font-weight: 500;
-}
-
-.sec-error {
-  color: var(--el-color-danger);
-}
-
-.sec-assets {
-  color: var(--el-color-primary);
-}
-
-.desc {
-  color: var(--el-text-color-regular);
-  margin: 0 0 12px;
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.code {
-  background: var(--el-fill-color);
-  border-radius: 6px;
-  padding: 12px 16px;
-  overflow-x: auto;
-  margin: 0 0 12px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  color: var(--el-text-color-primary);
-}
-
+/* 页面壳层与正文排版（.page/.page-card/.page-title/.page-desc/.desc/.code/.bullets）
+   由全局 style.css 统一提供，这里只保留本页特有的样式 */
 .code.err {
   border-left: 3px solid var(--el-color-danger);
 }
@@ -246,16 +176,5 @@ export default {
   border-radius: 4px;
   display: block;
   margin: 0 auto;
-}
-
-.tips {
-  margin: 4px 0 0;
-  padding-left: 20px;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.tips li {
-  margin-bottom: 2px;
 }
 </style>

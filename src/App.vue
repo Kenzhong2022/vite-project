@@ -1,18 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import {
-  Promotion,
-  HomeFilled,
-  Files,
-  Lightning,
-  Timer,
-  Sort,
-  RefreshRight,
-  Brush,
-  InfoFilled,
-} from '@element-plus/icons-vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import EnvPanel from '@/components/EnvPanel.vue'
+import TocTree from '@/components/TocTree.vue'
+import { navItems } from '@/config/navigation.js'
 
 const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
@@ -26,6 +17,10 @@ const keepAliveIncludes = router
   .getRoutes()
   .filter((r) => r.meta.keepAlive)
   .map((r) => r.name)
+
+const route = useRoute()
+// 侧边目录：数据来自当前路由的 meta.toc（结构见 TocTree.vue），未配置的页面自动隐藏
+const tocSections = computed(() => route.meta.toc || [])
 
 let pollTimer = null
 let countdownTimer = null
@@ -80,40 +75,33 @@ onUnmounted(() => {
         Vite
       </div>
       <nav class="app-nav">
-        <router-link to="/" class="nav-link" exact-active-class="nav-link-active">
-          <el-icon><HomeFilled /></el-icon><span>首页</span>
-        </router-link>
-        <router-link to="/static-assets" class="nav-link" active-class="nav-link-active">
-          <el-icon><Files /></el-icon><span>静态资源</span>
-        </router-link>
-        <router-link to="/pre-bundle" class="nav-link" active-class="nav-link-active">
-          <el-icon><Lightning /></el-icon><span>预构建</span>
-        </router-link>
-        <router-link to="/version-check" class="nav-link" active-class="nav-link-active">
-          <el-icon><RefreshRight /></el-icon><span>版本热更新</span>
-        </router-link>
-        <router-link to="/plugin-order" class="nav-link" active-class="nav-link-active">
-          <el-icon><Sort /></el-icon><span>插件开发</span>
-        </router-link>
-        <router-link to="/keep-alive-test" class="nav-link" active-class="nav-link-active">
-          <el-icon><Timer /></el-icon><span>KeepAlive</span>
-        </router-link>
-        <router-link to="/element-theme" class="nav-link" active-class="nav-link-active">
-          <el-icon><Brush /></el-icon><span>主题色</span>
-        </router-link>
-        <router-link to="/about" class="nav-link" active-class="nav-link-active">
-          <el-icon><InfoFilled /></el-icon><span>关于</span>
+        <router-link
+          v-for="item in navItems"
+          :key="item.to"
+          :to="item.to"
+          :exact-path="item.exact || undefined"
+          active-class="nav-link-active"
+          class="nav-link"
+        >
+          <el-icon><component :is="item.icon" /></el-icon><span>{{ item.label }}</span>
         </router-link>
       </nav>
     </div>
   </header>
 
   <main class="app-main">
-    <router-view v-slot="{ Component }">
-      <keep-alive :include="keepAliveIncludes">
-        <component :is="Component" />
-      </keep-alive>
-    </router-view>
+    <div class="app-layout">
+      <div class="app-content">
+        <router-view v-slot="{ Component }">
+          <keep-alive :include="keepAliveIncludes">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </div>
+      <aside v-if="tocSections.length" class="app-toc">
+        <TocTree :sections="tocSections" />
+      </aside>
+    </div>
   </main>
 
   <EnvPanel :remaining="remaining" />
@@ -185,5 +173,28 @@ onUnmounted(() => {
 .app-main {
   min-height: calc(100vh - 52px);
   padding: 24px 0;
+}
+
+.app-layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.app-toc {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 76px; /* header 52px + 间距 24px */
+  max-height: calc(100vh - 100px);
+  overflow: auto;
 }
 </style>

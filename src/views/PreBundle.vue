@@ -132,21 +132,6 @@ import { someMethod } from '/node_modules/.vite/deps/my-dep.js?v=f3sf2ebd'</pre>
 </template>
 
 <style scoped>
-.bullets {
-  margin: 0;
-  padding-left: 20px;
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.bullets li {
-  margin-bottom: 4px;
-}
-
-.bullets strong {
-  color: var(--el-text-color-primary);
-}
-
 .img-box {
   text-align: center;
 }

@@ -47,5 +47,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StaticAssetsDemo: typeof import('./src/components/StaticAssetsDemo.vue')['default']
+    TocTree: typeof import('./src/components/TocTree.vue')['default']
   }
 }

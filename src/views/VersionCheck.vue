@@ -98,7 +98,7 @@ async function checkVersion() {
 
     <el-card class="page-card" shadow="never">
       <template #header>💡 为什么能绕过缓存？</template>
-      <ul class="tips">
+      <ul class="bullets">
         <li>
           <strong>缓存策略由部署平台决定</strong>。<code>public/</code> 不加哈希 ≠
           不缓存。Cloudflare Pages / Netlify / Nginx 上，不带哈希的 public 文件通常被缓存 1
@@ -163,17 +163,5 @@ async function checkVersion() {
 
 .status-item.error .status-val {
   color: var(--el-color-danger);
-}
-
-.tips {
-  margin: 0;
-  padding-left: 20px;
-  color: var(--el-text-color-regular);
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.tips li {
-  margin-bottom: 6px;
 }
 </style>

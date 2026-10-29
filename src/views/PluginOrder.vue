@@ -7,7 +7,7 @@
     </p>
 
     <!-- ① 插件想做什么 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>① 自定义插件想做什么</template>
       <p class="desc">
         <code>vue-route-name</code> 在 <code>buildStart</code> 时解析路由表，建立
@@ -22,7 +22,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ② 被谁影响 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>② 它会被谁影响：plugin-vue 把 SFC 编译成 JS</template>
       <p class="desc">
         SFC 是 Vue 框架指定的文件格式，浏览器并不认识，必须先编译。官方链条：
@@ -42,7 +42,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ③ 排错顺序的后果 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>③ 排错顺序会发生什么（实测）</template>
       <p class="desc">
         把 <code>enforce: 'pre'</code> 注释掉、且本插件在数组里排在 <code>vue()</code> 之后，
@@ -65,7 +65,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ④ Vite 的排序规则 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>④ Vite 如何决定插件执行顺序</template>
       <p class="desc">
         Vite 先按 <code>enforce</code> 字段把插件分桶，再在<strong>同一桶内</strong>按数组顺序执行：
@@ -89,7 +89,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ⑤ 解法 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>⑤ 关键字段：enforce: 'pre'</template>
       <pre class="code"><code>return {
   name: 'vite-plugin-vue-route-name',
@@ -103,7 +103,7 @@ descriptor.scriptSetup         // 找到 &lt;script setup&gt; 块
     </el-card>
 
     <!-- ⑥ 最终闭环 -->
-    <el-card shadow="never" class="page-card">
+    <el-card class="page-card" shadow="never">
       <template #header>⑥ 最终闭环：keep-alive 的 include 生效</template>
       <pre class="code"><code>路由表 meta.keepAlive: true
   ↓ 自动推导（App.vue）
