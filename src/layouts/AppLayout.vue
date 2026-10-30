@@ -34,15 +34,8 @@ const route = useRoute()
 // 卡片锚点 id 由 SectionCard 用 section.key 渲染
 const tocSections = computed(() => route.meta.toc || [])
 
-// 手机端汉堡菜单：点击展开导航项列表
-function onNavCommand(to) {
-  router.push(to)
-}
-
-// 手机端菜单项高亮：首页要求精确匹配，其余路径前缀匹配即可
-function isNavActive(item) {
-  return item.exact ? route.path === item.to : route.path.startsWith(item.to)
-}
+// 手机端导航抽屉
+const navDrawerOpen = ref(false)
 
 let pollTimer = null
 let countdownTimer = null
@@ -96,7 +89,7 @@ onUnmounted(() => {
         <div class="app-logo-icon"><img src="/favicon.svg" /></div>
         <div style="color: var(--el-color-primary)">Vite</div>
       </div>
-      <!-- 电脑端：横排导航；手机/平板：汉堡下拉菜单（trigger=click 适配触屏） -->
+      <!-- 电脑端：横排导航；手机/平板：汉堡按钮 + 抽屉导航 -->
       <nav v-if="isDesktop" class="app-nav">
         <router-link
           v-for="item in navItems"
@@ -109,27 +102,15 @@ onUnmounted(() => {
           <el-icon><component :is="item.icon" /></el-icon><span>{{ item.label }}</span>
         </router-link>
       </nav>
-      <el-dropdown v-else class="app-nav-mobile" trigger="click" @command="onNavCommand">
-        <button class="nav-burger" type="button" aria-label="打开导航菜单">
-          <el-icon :size="20"><Menu /></el-icon>
-        </button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <template v-for="group in navGroups" :key="group.category">
-              <!-- 分类标题：静态 li，不可点击 -->
-              <li class="nav-group-title">{{ group.category }}</li>
-              <el-dropdown-item
-                v-for="item in group.items"
-                :key="item.to"
-                :command="item.to"
-                :class="{ 'nav-item-active': isNavActive(item) }"
-              >
-                <el-icon><component :is="item.icon" /></el-icon>{{ item.label }}
-              </el-dropdown-item>
-            </template>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <button
+        v-else
+        class="nav-burger"
+        type="button"
+        aria-label="打开导航菜单"
+        @click="navDrawerOpen = true"
+      >
+        <el-icon :size="20"><Menu /></el-icon>
+      </button>
     </div>
   </header>
 
@@ -165,6 +146,27 @@ onUnmounted(() => {
       </aside>
     </div>
   </main>
+
+  <!-- 手机端导航抽屉：分组展示，router-link 复用 exact 语义做高亮，点击后关闭抽屉 -->
+  <el-drawer v-model="navDrawerOpen" title="导航菜单" direction="ltr" size="272px" class="nav-drawer">
+    <nav class="drawer-nav">
+      <template v-for="group in navGroups" :key="group.category">
+        <div class="nav-group-title">{{ group.category }}</div>
+        <router-link
+          v-for="item in group.items"
+          :key="item.to"
+          :to="item.to"
+          :exact-path="item.exact || undefined"
+          active-class="nav-item-active"
+          class="drawer-nav-item"
+          @click="navDrawerOpen = false"
+        >
+          <el-icon><component :is="item.icon" /></el-icon>
+          <span>{{ item.label }}</span>
+        </router-link>
+      </template>
+    </nav>
+  </el-drawer>
 
   <EnvPanel :remaining="remaining" />
 </template>
@@ -235,21 +237,40 @@ onUnmounted(() => {
   background: var(--el-color-primary-light-9);
 }
 
-/* 本 style 块非 scoped（全局样式），直接写普通选择器即可；
-   :global() 只在 <style scoped> 内有意义，这里写它会被当非法伪类导致规则失效。
-   下拉菜单 teleport 到 body 也不影响 —— 全局样式本就能命中。 */
+/* 抽屉内容 teleport 到 body；本 style 块非 scoped（全局样式），直接写普通选择器即可。
+   注意 :global() 只在 <style scoped> 内有意义，这里写它会被当非法伪类导致规则失效。 */
 .nav-group-title {
-  padding: 6px 16px 4px;
+  padding: 14px 16px 6px;
   font-size: 11px;
   color: var(--el-text-color-secondary);
   letter-spacing: 0.5px;
   border-top: 1px solid var(--el-border-color-lighter);
-  list-style: none;
   user-select: none;
 }
 
-.el-dropdown-menu > .nav-group-title:first-child {
+.drawer-nav > .nav-group-title:first-child {
   border-top: none;
+  padding-top: 4px;
+}
+
+.drawer-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--el-text-color-regular);
+  text-decoration: none;
+  border-radius: 8px;
+  margin: 0 8px;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.drawer-nav-item:hover {
+  color: var(--el-color-primary);
+  background: var(--el-color-primary-light-9);
 }
 
 .nav-item-active {
