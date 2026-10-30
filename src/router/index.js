@@ -74,6 +74,13 @@ const router = createRouter({
       meta: { title: 'Props 稳定性', toc: propsStabilitySections },
     },
     {
+      // 纯工具页：无目录（meta.toc），入口在 SideDock 第二个 li；媒体类页面归 views/media/
+      path: '/image-cutout',
+      name: 'image-cutout',
+      component: () => import('@/views/media/ImageCutout.vue'),
+      meta: { title: '图片抠图' },
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('@/views/About.vue'),

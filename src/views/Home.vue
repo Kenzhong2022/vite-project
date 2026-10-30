@@ -18,7 +18,9 @@
 </template>
 
 <script setup>
-import { navGroups } from '@/config/navigation.js'
+import { groupNavByCategory, navItems } from '@/config/navigation.js'
+
+const navGroups = groupNavByCategory(navItems)
 </script>
 
 <style scoped>

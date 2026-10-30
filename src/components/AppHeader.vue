@@ -8,10 +8,13 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { ArrowDown, Menu } from '@element-plus/icons-vue'
 import { useDevice } from '@/composables/useDevice'
-import { navGroups } from '@/config/navigation.js'
+import { groupNavByCategory, navItems } from '@/config/navigation.js'
 
 // 设备判断：复用 useDevice（断点分档 + localStorage 可强制切换），desktop = ≥1024px
 const { isDesktop } = useDevice()
+
+// 电脑端分类导航与移动端抽屉共用的分组数据
+const navGroups = groupNavByCategory(navItems)
 
 // 手机端导航抽屉
 const navDrawerOpen = ref(false)
