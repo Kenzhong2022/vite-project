@@ -1,7 +1,7 @@
 <template>
   <div class="page">
-    <section v-for="group in categoryGroups" :key="group.name" class="card-section">
-      <h3 class="section-title">{{ group.name }}</h3>
+    <section v-for="group in navGroups" :key="group.category" class="card-section">
+      <h3 class="section-title">{{ group.category }}</h3>
       <el-row :gutter="12">
         <el-col v-for="card in group.items" :key="card.to" :xs="24" :sm="12" :md="6">
           <el-card class="home-card" shadow="hover" @click="$router.push(card.to)">
@@ -18,13 +18,7 @@
 </template>
 
 <script setup>
-import { navItems, categoryOrder } from '@/config/navigation.js'
-
-// 按 categoryOrder 的顺序把导航项归组，供首页分区展示
-const categoryGroups = categoryOrder.map((name) => ({
-  name,
-  items: navItems.filter((item) => item.category === name),
-}))
+import { navGroups } from '@/config/navigation.js'
 </script>
 
 <style scoped>

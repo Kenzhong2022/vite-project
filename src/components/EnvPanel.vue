@@ -67,7 +67,12 @@ const envInfo = computed(() => ({
   background: #fff;
   border: 1px solid var(--el-border-color);
   border-radius: 8px;
-  box-shadow: var(--el-box-shadow-light);
+  filter: drop-shadow(0 0 3px var(--el-color-primary-light-9));
+}
+
+.env-panel-collapsed:hover {
+  color: var(--el-color-primary);
+  filter: drop-shadow(0 0 3px var(--el-color-primary));
 }
 
 .env-panel-tick {

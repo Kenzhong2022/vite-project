@@ -100,3 +100,10 @@ export const navItems = [
 
 // 首页卡片的分组展示顺序
 export const categoryOrder = ['Vite', 'Element Plus', 'Vue3', '项目基础']
+
+// 按分类归组后的导航数据（单一归组实现，直接消费）：
+// 供首页卡片分区、移动端菜单分组等场景使用，结构 [{ category, items }]
+// 顺序与 categoryOrder 一致，空分类不会出现在结果里
+export const navGroups = categoryOrder
+  .map((category) => ({ category, items: navItems.filter((item) => item.category === category) }))
+  .filter((group) => group.items.length)
