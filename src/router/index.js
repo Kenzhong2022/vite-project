@@ -10,6 +10,7 @@ import { sections as keepAliveSections } from '@/views/KeepAliveTest.vue'
 import { sections as elementThemeSections } from '@/views/ElementTheme.vue'
 import { sections as composablesSections } from '@/views/ComposablesDemo.vue'
 import { sections as componentOverheadSections } from '@/views/ComponentOverheadDemo.vue'
+import { sections as propsStabilitySections } from '@/views/PropsStabilityDemo.vue'
 import { sections as aboutSections } from '@/views/About.vue'
 
 const router = createRouter({
@@ -65,6 +66,12 @@ const router = createRouter({
       name: 'component-overhead',
       component: () => import('@/views/ComponentOverheadDemo.vue'),
       meta: { title: '组件开销', toc: componentOverheadSections },
+    },
+    {
+      path: '/props-stability',
+      name: 'props-stability',
+      component: () => import('@/views/PropsStabilityDemo.vue'),
+      meta: { title: 'Props 稳定性', toc: propsStabilitySections },
     },
     {
       path: '/about',

@@ -13,6 +13,7 @@ import {
   Brush,
   Connection,
   Histogram,
+  Aim,
   InfoFilled,
 } from '@element-plus/icons-vue'
 
@@ -79,6 +80,13 @@ export const navItems = [
     icon: Histogram,
     label: '组件开销',
     desc: '多余组件抽象的性能损耗：300 个 Badge 实例 vs 0 个',
+    category: 'Vue3',
+  },
+  {
+    to: '/props-stability',
+    icon: Aim,
+    label: 'Props 稳定性',
+    desc: '源头透传 vs 结果透传：onUpdated 实测更新传染 100 → 2',
     category: 'Vue3',
   },
   {
