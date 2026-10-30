@@ -8,6 +8,7 @@
 import { onMounted, onUnmounted, ref } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import EnvPanel from '@/components/EnvPanel.vue'
+import SideDock from '@/components/SideDock.vue'
 
 const POLL_INTERVAL = 5
 const remaining = ref(POLL_INTERVAL)
@@ -61,5 +62,6 @@ onUnmounted(() => {
 
 <template>
   <AppLayout />
+  <SideDock />
   <EnvPanel :remaining="remaining" />
 </template>

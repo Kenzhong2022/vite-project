@@ -57,7 +57,6 @@ onUnmounted(() => {
     <div class="app-header-inner">
       <div class="app-logo">
         <div class="app-logo-icon"><img src="/favicon.svg" /></div>
-        <div style="color: var(--el-color-primary)">Vite</div>
       </div>
       <!-- 电脑端：分类导航，hover 分类展开面板；手机/平板：汉堡按钮 + 抽屉导航 -->
       <nav v-if="isDesktop" class="app-nav">
@@ -155,11 +154,11 @@ onUnmounted(() => {
 }
 
 .app-header-inner {
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 0 24px;
   height: 52px;
 }
@@ -169,7 +168,7 @@ onUnmounted(() => {
   font-weight: 600;
   color: var(--el-text-color-primary);
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 6px;
   height: 100%;
 }
