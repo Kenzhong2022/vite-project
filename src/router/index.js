@@ -9,6 +9,7 @@ import { sections as pluginOrderSections } from '@/views/PluginOrder.vue'
 import { sections as keepAliveSections } from '@/views/KeepAliveTest.vue'
 import { sections as elementThemeSections } from '@/views/ElementTheme.vue'
 import { sections as composablesSections } from '@/views/ComposablesDemo.vue'
+import { sections as componentOverheadSections } from '@/views/ComponentOverheadDemo.vue'
 import { sections as aboutSections } from '@/views/About.vue'
 
 const router = createRouter({
@@ -58,6 +59,12 @@ const router = createRouter({
       name: 'composables',
       component: () => import('@/views/ComposablesDemo.vue'),
       meta: { title: '组合式函数', toc: composablesSections },
+    },
+    {
+      path: '/component-overhead',
+      name: 'component-overhead',
+      component: () => import('@/views/ComponentOverheadDemo.vue'),
+      meta: { title: '组件开销', toc: componentOverheadSections },
     },
     {
       path: '/about',

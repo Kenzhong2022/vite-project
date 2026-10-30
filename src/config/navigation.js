@@ -12,6 +12,7 @@ import {
   RefreshRight,
   Brush,
   Connection,
+  Histogram,
   InfoFilled,
 } from '@element-plus/icons-vue'
 
@@ -71,6 +72,13 @@ export const navItems = [
     icon: Connection,
     label: '组合式函数',
     desc: '有状态逻辑复用：ref vs reactive 返回值对比',
+    category: 'Vue3',
+  },
+  {
+    to: '/component-overhead',
+    icon: Histogram,
+    label: '组件开销',
+    desc: '多余组件抽象的性能损耗：300 个 Badge 实例 vs 0 个',
     category: 'Vue3',
   },
   {
