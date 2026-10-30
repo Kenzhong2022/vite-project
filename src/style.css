@@ -1,3 +1,16 @@
+/* ========= 基础 reset：清除 UA 默认边距 + 统一 border-box ========= */
+/* body 默认 8px margin 会把吸顶 header 顶离视口顶部，依赖"header 贴顶"的定位全部失准 */
+body {
+  margin: 0;
+}
+
+/* border-box：width/height 直接等于边框盒，写死的 52px 这类尺寸不会被 padding/border 撑大 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* ========= 页面壳层：所有 view 统一使用 ========= */
 .page {
   max-width: 960px;
