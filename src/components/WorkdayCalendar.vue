@@ -86,7 +86,7 @@ function cellTextClass(dateStr) {
       >
     </div>
 
-    <el-calendar v-model="currentDate">
+    <el-calendar v-model="currentDate" class="calendar">
       <template #date-cell="{ data }">
         <div class="cell" :class="cellClass(data.day)">
           <span class="day-num">{{ Number(data.day.slice(-2)) }}</span>
@@ -125,6 +125,13 @@ function cellTextClass(dateStr) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px 16px;
+  }
+
+  .calendar {
+    height: 100%;
+    :deep(.el-calendar__body) {
+      padding: 0;
+    }
   }
 }
 

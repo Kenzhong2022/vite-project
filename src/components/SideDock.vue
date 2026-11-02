@@ -9,9 +9,11 @@ import { computed } from 'vue'
 import { Picture, Top } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router'
 import { navItems } from '@/config/navigation.js'
+import { useDevice } from '@/composables/useDevice'
 
 const route = useRoute()
 const router = useRouter()
+const { isMobile } = useDevice()
 
 // 当前路由的域归属：按 to 精确匹配 navItems（exact 语义）；不在导航内的路由无域、不高亮
 const currentZone = computed(() => navItems.find((item) => item.to === route.path)?.zone)
@@ -22,7 +24,7 @@ function backToTop() {
 </script>
 
 <template>
-  <ul class="side-dock">
+  <ul class="side-dock" :class="{ 'is-mobile': isMobile }">
     <li
       class="side-dock-item side-dock-brand"
       :class="{ 'is-active': currentZone === 'notes' }"
@@ -46,6 +48,10 @@ function backToTop() {
 </template>
 
 <style scoped lang="scss">
+.is-mobile.side-dock {
+  opacity: 0;
+}
+
 .side-dock {
   opacity: 0.4;
   position: fixed;
