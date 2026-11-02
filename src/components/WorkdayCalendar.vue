@@ -6,11 +6,11 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import dayjs from 'dayjs'
-import { useChineseHolidays, getDayType } from '@/composables/useChineseHolidays'
+import { useHoliday, getDayType } from '@/composables/useHoliday'
 import { useRestMode } from '@/composables/useRestMode'
 import { useDevice } from '@/composables/useDevice'
 
-const { loadYear, yearMaps, loading, unavailableYears } = useChineseHolidays()
+const { loadYear, yearMaps, loading, unavailableYears, region } = useHoliday()
 const { restMode } = useRestMode()
 const { isMobile } = useDevice() // 统计条两列布局用（复用全局断点，可被 localStorage 强制切换）
 const currentDate = ref(new Date())
@@ -18,11 +18,11 @@ const currentDate = ref(new Date())
 const year = computed(() => currentDate.value.getFullYear())
 const month = computed(() => currentDate.value.getMonth() + 1)
 
-// 当前查看的年份数据缺失（未来年份 holiday-cn 尚未发布，或本次拉取失败）
-const yearDataMissing = computed(() => !!unavailableYears[year.value])
+// 当前查看的年份 + 地区数据缺失（未来年份尚未发布、代理全挂或拉取失败）
+const yearDataMissing = computed(() => !!unavailableYears[`${region.value}:${year.value}`])
 
-// 首次加载 / 跨年翻页时拉取对应年份数据
-watch(year, (y) => loadYear(y), { immediate: true })
+// 首次加载 / 跨年翻页 / 切地区时拉取对应数据（getDayType 默认参数按调用时 region 取，无需显式传）
+watch([year, region], ([y]) => loadYear(y), { immediate: true })
 
 function cellInfo(dateStr) {
   return getDayType(dateStr, yearMaps, restMode.value)
@@ -187,11 +187,12 @@ function cellTextClass(dateStr) {
 }
 
 .is-today .day-num {
-  background: #3b82f6;
+  flex: 1;
+  height: 15%;
+  aspect-ratio: 1 / 1;
+  background: var(--el-color-primary);
   color: #fff;
   border-radius: 50%;
-  width: 22px;
-  height: 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;

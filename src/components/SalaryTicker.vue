@@ -12,7 +12,7 @@
 import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import dayjs from 'dayjs'
 import { Setting } from '@element-plus/icons-vue'
-import { useChineseHolidays } from '@/composables/useChineseHolidays'
+import { useHoliday } from '@/composables/useHoliday'
 import { useSalary } from '@/composables/useSalary'
 import { useDevice } from '@/composables/useDevice'
 import SalaryConfigForm from '@/components/SalaryConfigForm.vue'
@@ -20,7 +20,7 @@ import SalaryLivePanel from '@/components/SalaryLivePanel.vue'
 
 const STORAGE_KEY = 'redeem-salary-settings'
 
-const { loadYear, yearMaps } = useChineseHolidays()
+const { loadYear, yearMaps, region } = useHoliday()
 const { isMobile } = useDevice()
 const now = ref(new Date())
 const configDrawer = ref(false) // 移动端配置抽屉
@@ -30,6 +30,9 @@ onMounted(() => {
   loadYear(now.value.getFullYear())
   timer = setInterval(() => (now.value = new Date()), 1000)
 })
+
+// 切地区：拉取当年新地区数据，workDaysThisMonth / isWorkdayToday 的 computed 会自动重算
+watch(region, () => loadYear(now.value.getFullYear()))
 
 onUnmounted(() => clearInterval(timer))
 

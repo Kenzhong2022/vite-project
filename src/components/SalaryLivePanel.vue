@@ -72,12 +72,12 @@ function fmtMoney(n) {
   height: 100%;
 
   :deep(.el-timeline-item) {
-    font-size: 25px;
+    font-size: 18px;
     flex: 1;
   }
 
   :deep(.el-timeline-item__timestamp) {
-    font-size: 25px;
+    font-size: 14px;
     color: var(--el-text-color-secondary);
     font-variant-numeric: tabular-nums;
   }

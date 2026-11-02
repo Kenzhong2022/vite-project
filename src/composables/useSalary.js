@@ -1,9 +1,9 @@
 // 工资实时计算：月薪按当月实际工作日折算日薪（替代写死的 22 天），
 // 再按秒推进「今日已赚 / 下班倒计时 / 进度」。now 是每秒更新的 ref，settings 为表单配置。
-// 日期运算统一走 dayjs（本地时区）；依赖 useChineseHolidays 的 yearMaps 判定工作日
+// 日期运算统一走 dayjs（本地时区）；依赖 useHoliday 的 yearMaps 判定工作日
 import dayjs from 'dayjs'
 import { computed } from 'vue'
-import { getDayType, countMonthWorkdays } from './useChineseHolidays'
+import { getDayType, countMonthWorkdays } from './useHoliday'
 import { useRestMode } from './useRestMode'
 
 /**

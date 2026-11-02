@@ -36,6 +36,16 @@
           @update:model-value="setAltWeekEpoch"
         />
       </template>
+
+      <!-- 节假日数据地区切换：大陆 holiday-cn / 香港 1823.gov.hk，切换后两 Tab 共用同一份归一化数据 -->
+      <el-select
+        class="region-picker"
+        :model-value="region"
+        size="small"
+        @update:model-value="setRegion"
+      >
+        <el-option v-for="r in REGIONS" :key="r.value" :label="r.label" :value="r.value" />
+      </el-select>
     </h1>
 
     <el-tabs v-model="activeTab">
@@ -50,19 +60,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Timer } from '@element-plus/icons-vue'
 import WorkdayCalendar from '@/components/WorkdayCalendar.vue'
 import SalaryTicker from '@/components/SalaryTicker.vue'
-import { useChineseHolidays } from '@/composables/useChineseHolidays'
+import { useHoliday, REGIONS } from '@/composables/useHoliday'
 import { useRestMode } from '@/composables/useRestMode'
 
-const { loadYear } = useChineseHolidays()
+const { loadYear, region, setRegion } = useHoliday()
 const { restMode, modes, altWeekEpoch, setAltWeekEpoch } = useRestMode()
 
 const activeTab = ref('calendar')
 
 onMounted(() => loadYear(new Date().getFullYear()))
+
+// 切地区：预拉当年新地区数据（日历 Tab 的跨年翻页有自己的 watch；工资 Tab 也各自 watch）
+watch(region, () => loadYear(new Date().getFullYear()))
 </script>
 
 <style scoped lang="scss">
@@ -97,5 +110,10 @@ onMounted(() => loadYear(new Date().getFullYear()))
 
 .alt-epoch-picker {
   width: 200px;
+}
+
+.region-picker {
+  width: 110px;
+  margin-left: 8px;
 }
 </style>
