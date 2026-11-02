@@ -47,9 +47,10 @@ function backToTop() {
 
 <style scoped lang="scss">
 .side-dock {
+  opacity: 0.4;
   position: fixed;
   right: 20px;
-  top: 50%;
+  top: 70%;
   transform: translateY(-50%);
   z-index: 100;
   margin: 0;
@@ -65,6 +66,9 @@ function backToTop() {
   box-shadow: var(--el-box-shadow-light);
   user-select: none;
   color: var(--el-text-color-regular);
+  &:hover {
+    opacity: 1;
+  }
 }
 
 /* 基类：所有 dock 项共用的 32×32 盒子与交互态 */

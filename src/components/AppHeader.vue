@@ -328,6 +328,7 @@ onUnmounted(() => {
 }
 
 .nav-burger {
+  margin-left: auto;
   border: none;
   background: transparent;
   color: var(--el-text-color-primary);

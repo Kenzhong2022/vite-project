@@ -56,7 +56,6 @@ const envInfo = computed(() => ({
   z-index: 9999;
   cursor: pointer;
   user-select: none;
-  filter: drop-shadow(0 0 3px var(--el-color-primary-light-5));
 }
 
 .env-panel-collapsed {

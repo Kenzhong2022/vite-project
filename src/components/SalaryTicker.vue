@@ -1,21 +1,29 @@
 <!--
-  SalaryTicker：Tab 2 —— 实时工资
+  SalaryTicker：Tab 2 —— 实时工资（布局壳 + 数据层）
   - 日薪按本月实际工作日折算（countMonthWorkdays），配置持久化到 localStorage
   - 每秒 tick 驱动金额跳动；数字用 tabular-nums 防抖动
   - 金钱相关文字统一暖金色系，时间/加班用独立色区分维度
-  - 框架三段式：.main-layout（左列 .col-left：.hero 实时概览 + .panel-config 配置；右列 .col-right：.panel-live 时间线+加班）→ .total-bar（今日总收获）
+  - 布局：桌面 .main-layout 左右两列（左：.hero + 配置；右：时间线面板）→ .total-bar
+    移动端（useDevice.isMobile）：hero 与时间线面板从上到下堆叠，配置收进按钮 + el-drawer
+  - 内容已抽离：SalaryConfigForm（配置表单）/ SalaryLivePanel（时间线+加班），本组件只管数据与布局
   - .money 金额拆成 .int 整数 + .decimal 小数，小数独立类名便于差异化样式
 -->
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue'
 import dayjs from 'dayjs'
+import { Setting } from '@element-plus/icons-vue'
 import { useChineseHolidays } from '@/composables/useChineseHolidays'
 import { useSalary } from '@/composables/useSalary'
+import { useDevice } from '@/composables/useDevice'
+import SalaryConfigForm from '@/components/SalaryConfigForm.vue'
+import SalaryLivePanel from '@/components/SalaryLivePanel.vue'
 
 const STORAGE_KEY = 'redeem-salary-settings'
 
 const { loadYear, yearMaps } = useChineseHolidays()
+const { isMobile } = useDevice()
 const now = ref(new Date())
+const configDrawer = ref(false) // 移动端配置抽屉
 let timer = null
 
 onMounted(() => {
@@ -118,10 +126,10 @@ function fmtDuration(sec) {
       class="rest-alert"
     />
 
-    <!-- 主区：左右布局 —— 左列（实时概览 → 配置）上下排布，右列（时间线 + 加班） -->
-    <section class="main-layout">
+    <!-- 主区：桌面左右两列（左列 hero 上 + 配置下）；移动端改上下堆叠 -->
+    <section class="main-layout" :class="{ 'is-mobile-stacked': isMobile }">
       <div class="col-left">
-        <!-- 左列上：实时概览 —— 大金额 / 折算说明 / 进度条 -->
+        <!-- 实时概览 —— 大金额 / 折算说明 / 进度条 -->
         <section class="hero">
           <div class="main-stat">
             <span class="label">今日已赚</span>
@@ -145,69 +153,37 @@ function fmtDuration(sec) {
           />
         </section>
 
-        <!-- 左列下：配置 -->
-        <div class="panels-card panel-config">
-          <el-form label-width="auto" label-position="top">
-            <el-form-item label="月薪">
-              <el-input-number v-model="settings.monthlySalary" :min="0" :step="1000" />
-            </el-form-item>
-            <el-form-item label="上班时间">
-              <el-time-select
-                v-model="settings.workStart"
-                start="00:00"
-                end="23:30"
-                step="00:30"
-                :clearable="false"
-              />
-            </el-form-item>
-            <el-form-item label="下班时间">
-              <el-time-select
-                v-model="settings.workEnd"
-                start="00:00"
-                end="23:30"
-                step="00:30"
-                :clearable="false"
-              />
-            </el-form-item>
-            <el-form-item label="今日加班（h）">
-              <el-input-number v-model="settings.overtimeHours" :min="0" :max="24" :step="0.5" />
-            </el-form-item>
-            <el-form-item label="加班总收入（¥）">
-              <el-input-number v-model="settings.overtimeIncome" :min="0" :step="50" />
-            </el-form-item>
-          </el-form>
+        <!-- 配置：仅桌面端嵌在左列下方；移动端收进下方抽屉 -->
+        <div v-if="!isMobile" class="panels-card panel-config">
+          <SalaryConfigForm :settings="settings" />
         </div>
       </div>
 
-      <!-- 右列：时间线 + 加班 -->
+      <!-- 时间线 + 加班：桌面为右列，移动端堆叠在 hero 下方 -->
       <div class="panels-card panel-live col-right">
-        <div class="panel-rows">
-          <!-- 上下班时间线：此刻节点带倒计时 -->
-          <div class="timeline-row">
-            <el-timeline class="day-timeline">
-              <el-timeline-item
-                v-for="item in dayTimeline"
-                :key="item.timestamp"
-                :timestamp="item.timestamp"
-                :type="item.type"
-                :hollow="item.hollow"
-              >
-                {{ item.content }}
-              </el-timeline-item>
-            </el-timeline>
-          </div>
-
-          <div class="overtime-row">
-            加班时长 <b class="num-overtime">{{ settings.overtimeHours }}</b> h &nbsp 折算时薪
-            <b class="num-ot-money">¥ {{ fmtMoney(overtimeRate) }}</b
-            >/h &nbsp 额外收入
-            <b class="num-ot-money">¥ {{ fmtMoney(overtimeIncome) }}</b>
-          </div>
-        </div>
+        <SalaryLivePanel
+          :timeline="dayTimeline"
+          :overtime-hours="settings.overtimeHours"
+          :overtime-rate="overtimeRate"
+          :overtime-income="overtimeIncome"
+        />
       </div>
     </section>
 
-    <!-- 框架区 3：底部合计 -->
+    <!-- 移动端：配置入口按钮 + 抽屉 -->
+    <el-button
+      v-if="isMobile"
+      class="config-trigger"
+      :icon="Setting"
+      @click="configDrawer = true"
+    >
+      工资配置
+    </el-button>
+    <el-drawer v-if="isMobile" v-model="configDrawer" title="工资配置" direction="rtl" size="85%">
+      <SalaryConfigForm :settings="settings" />
+    </el-drawer>
+
+    <!-- 底部合计 -->
     <footer class="total-bar">
       <span>今日总收获</span>
       <span class="money small">
@@ -219,7 +195,7 @@ function fmtDuration(sec) {
 </template>
 
 <style scoped lang="scss">
-/* ============ 框架区 1：实时概览 ============ */
+/* ============ 实时概览 ============ */
 .hero {
   display: flex;
   flex-direction: column;
@@ -287,11 +263,16 @@ function fmtDuration(sec) {
   font-variant-numeric: tabular-nums;
 }
 
-/* ============ 主区：左右布局 ============ */
+/* ============ 主区：桌面左右两列 / 移动端上下堆叠 ============ */
 .main-layout {
   display: flex;
   align-items: stretch;
   gap: 12px;
+
+  /* 移动端：hero → 时间线面板 从上到下 */
+  &.is-mobile-stacked {
+    flex-direction: column;
+  }
 }
 
 .col-left {
@@ -306,6 +287,13 @@ function fmtDuration(sec) {
   flex: 2;
 }
 
+.is-mobile-stacked {
+  .col-left,
+  .col-right {
+    flex: none;
+  }
+}
+
 /* 简易容器（替代 el-card）：描边 + 圆角 + 内边距 */
 .panels-card {
   border: 1px solid var(--el-border-color-lighter);
@@ -314,67 +302,13 @@ function fmtDuration(sec) {
   background: var(--el-bg-color);
 }
 
-.panel-rows {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: start;
-
-  .timeline-row,
-  .overtime-row {
-    width: 100%;
-    font-size: 13px;
-    color: #4b5563;
-  }
-
-  .timeline-row {
-    flex: 1;
-  }
+/* 移动端配置入口按钮 */
+.config-trigger {
+  width: 100%;
+  margin-top: 12px;
 }
 
-/* 上下班时间线 */
-.day-timeline {
-  padding-left: 4px;
-  margin: 2px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: 100%;
-
-  :deep(.el-timeline-item) {
-    font-size: 25px;
-    flex: 1;
-  }
-
-  :deep(.el-timeline-item__timestamp) {
-    font-size: 25px;
-    color: var(--el-text-color-secondary);
-    font-variant-numeric: tabular-nums;
-  }
-
-  :deep(.el-timeline-item__content) {
-    font-size: 25px;
-    color: #4b5563;
-    font-variant-numeric: tabular-nums;
-  }
-}
-
-/* 加班时长：橙 */
-.num-overtime {
-  color: #ea580c;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-/* 加班收入：金 */
-.num-ot-money {
-  color: #c98a0e;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-}
-
-/* ============ 框架区 3：底部合计 ============ */
+/* ============ 底部合计 ============ */
 .total-bar {
   display: flex;
   justify-content: space-between;

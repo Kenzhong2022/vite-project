@@ -7,7 +7,7 @@
 <template>
   <div class="page">
     <h1 class="page-title">
-      <el-icon><Timer /></el-icon>
+      <el-icon color="var(--el-color-primary)"><Timer /></el-icon>
       赎身倒计时
       <span class="rest-mode-tags">
         <el-tag
@@ -22,7 +22,9 @@
       </span>
       <!-- 大小周相位校准：选一个双休周里的日期，该周即为大周，之后逐周交替 -->
       <template v-if="restMode === 'alternate'">
-        <span class="alt-epoch-label">校准：选一个<b>双休周</b>里的日期，该周记为大周，之后逐周交替</span>
+        <span class="alt-epoch-label"
+          >校准：选一个<b>双休周</b>里的日期，该周记为大周，之后逐周交替</span
+        >
         <el-date-picker
           class="alt-epoch-picker"
           :model-value="altWeekEpoch"
