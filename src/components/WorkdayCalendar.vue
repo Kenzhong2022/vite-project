@@ -75,13 +75,13 @@ function cellTextClass(dateStr) {
       <span
         >本月工作日 <b>{{ stats.workdays }}</b> 天</span
       >
-      <span
+      <span :class="isMobile ? 'is-right' : ''"
         >休息 <b>{{ stats.rest }}</b> 天</span
       >
       <span
         >法定假 <b>{{ stats.holidays }}</b> 天</span
       >
-      <span
+      <span :class="isMobile ? 'is-right' : ''"
         >调休上班 <b>{{ stats.makeups }}</b> 天</span
       >
     </div>
@@ -104,6 +104,7 @@ function cellTextClass(dateStr) {
 .workday-calendar {
   .stats {
     display: flex;
+    justify-content: space-between;
     gap: 24px;
     margin-bottom: 12px;
     font-size: 14px;
@@ -112,6 +113,10 @@ function cellTextClass(dateStr) {
     b {
       color: var(--el-color-primary);
       font-variant-numeric: tabular-nums;
+    }
+
+    .is-right {
+      text-align: right;
     }
   }
 
