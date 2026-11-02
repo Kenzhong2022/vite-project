@@ -63,7 +63,7 @@ const activeTab = ref('calendar')
 onMounted(() => loadYear(new Date().getFullYear()))
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .page-title {
   display: flex;
   align-items: center;
@@ -86,11 +86,11 @@ onMounted(() => loadYear(new Date().getFullYear()))
   font-size: 12px;
   font-weight: normal;
   color: var(--el-text-color-secondary);
-}
 
-.alt-epoch-label b {
-  color: var(--el-color-primary);
-  font-weight: 600;
+  b {
+    color: var(--el-color-primary);
+    font-weight: 600;
+  }
 }
 
 .alt-epoch-picker {

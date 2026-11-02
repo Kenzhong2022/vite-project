@@ -45,7 +45,7 @@ function backToTop() {
   </ul>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .side-dock {
   position: fixed;
   right: 20px;
@@ -79,12 +79,12 @@ function backToTop() {
   transition:
     color 0.15s,
     background 0.15s;
-}
 
-.side-dock-item:hover,
-.side-dock-item.is-active {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
+  &:hover,
+  &.is-active {
+    color: var(--el-color-primary);
+    background: var(--el-color-primary-light-9);
+  }
 }
 
 /* 特化：品牌文字项 */

@@ -100,25 +100,27 @@ function cellTextClass(dateStr) {
   </div>
 </template>
 
-<style scoped>
-.stats {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: var(--el-text-color-regular);
-}
+<style scoped lang="scss">
+.workday-calendar {
+  .stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--el-text-color-regular);
 
-/* 手机端：收窄为两列网格，避免横向溢出 */
-.workday-calendar.is-mobile .stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 16px;
-}
+    b {
+      color: var(--el-color-primary);
+      font-variant-numeric: tabular-nums;
+    }
+  }
 
-.stats b {
-  color: var(--el-color-primary);
-  font-variant-numeric: tabular-nums;
+  /* 手机端：收窄为两列网格，避免横向溢出 */
+  &.is-mobile .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+  }
 }
 
 .data-alert {
@@ -143,11 +145,11 @@ function cellTextClass(dateStr) {
 
 .is-holiday {
   background: #fef2f2;
-}
 
-.is-holiday .day-num {
-  color: #dc2626;
-  font-weight: 600;
+  .day-num {
+    color: #dc2626;
+    font-weight: 600;
+  }
 }
 
 .is-makeup {

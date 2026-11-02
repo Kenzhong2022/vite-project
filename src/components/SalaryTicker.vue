@@ -218,7 +218,7 @@ function fmtDuration(sec) {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 /* ============ 框架区 1：实时概览 ============ */
 .hero {
   display: flex;
@@ -250,22 +250,22 @@ function fmtDuration(sec) {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
 
-.money .currency {
-  font-size: 0.6em;
-  margin-right: 2px;
-  font-weight: 600;
-}
+  .currency {
+    font-size: 0.6em;
+    margin-right: 2px;
+    font-weight: 600;
+  }
 
-.money .decimal {
-  font-size: 0.6em;
-  font-weight: 600;
-  opacity: 0.9;
-}
+  .decimal {
+    font-size: 0.6em;
+    font-weight: 600;
+    opacity: 0.9;
+  }
 
-.money.small {
-  font-size: 24px;
+  &.small {
+    font-size: 24px;
+  }
 }
 
 /* 次级文字：日薪折算说明 */
@@ -320,17 +320,17 @@ function fmtDuration(sec) {
   flex-direction: column;
   align-items: start;
   justify-content: start;
-}
 
-.panel-rows .timeline-row,
-.panel-rows .overtime-row {
-  width: 100%;
-  font-size: 13px;
-  color: #4b5563;
-}
+  .timeline-row,
+  .overtime-row {
+    width: 100%;
+    font-size: 13px;
+    color: #4b5563;
+  }
 
-.panel-rows .timeline-row {
-  flex: 1;
+  .timeline-row {
+    flex: 1;
+  }
 }
 
 /* 上下班时间线 */
@@ -341,23 +341,23 @@ function fmtDuration(sec) {
   flex-direction: column;
   gap: 8px;
   height: 100%;
-}
 
-:deep(.el-timeline-item) {
-  font-size: 25px;
-  flex: 1;
-}
+  :deep(.el-timeline-item) {
+    font-size: 25px;
+    flex: 1;
+  }
 
-.day-timeline :deep(.el-timeline-item__timestamp) {
-  font-size: 25px;
-  color: var(--el-text-color-secondary);
-  font-variant-numeric: tabular-nums;
-}
+  :deep(.el-timeline-item__timestamp) {
+    font-size: 25px;
+    color: var(--el-text-color-secondary);
+    font-variant-numeric: tabular-nums;
+  }
 
-.day-timeline :deep(.el-timeline-item__content) {
-  font-size: 25px;
-  color: #4b5563;
-  font-variant-numeric: tabular-nums;
+  :deep(.el-timeline-item__content) {
+    font-size: 25px;
+    color: #4b5563;
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 /* 加班时长：橙 */
@@ -392,13 +392,15 @@ function fmtDuration(sec) {
 }
 
 /* ============ 进度条 ============ */
-.progress :deep(.el-progress__text) {
-  font-variant-numeric: tabular-nums;
-  color: #b45309;
-  font-weight: 600;
-}
+.progress {
+  :deep(.el-progress__text) {
+    font-variant-numeric: tabular-nums;
+    color: #b45309;
+    font-weight: 600;
+  }
 
-.progress :deep(.el-progress-bar__outer) {
-  background-color: #fdf3e0;
+  :deep(.el-progress-bar__outer) {
+    background-color: #fdf3e0;
+  }
 }
 </style>
