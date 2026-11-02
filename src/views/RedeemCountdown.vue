@@ -85,6 +85,8 @@ watch(region, () => loadYear(new Date().getFullYear()))
   display: flex;
   align-items: center;
   gap: 8px;
+  font-family: 'ZCOOL KuaiLe', sans-serif;
+  letter-spacing: 2px;
 }
 
 .rest-mode-container {
