@@ -9,6 +9,8 @@
     <h1 class="page-title">
       <el-icon color="var(--el-color-primary)"><Timer /></el-icon>
       赎身倒计时
+    </h1>
+    <div class="rest-mode-container">
       <span class="rest-mode-tags">
         <el-tag
           v-for="m in modes"
@@ -46,7 +48,7 @@
       >
         <el-option v-for="r in REGIONS" :key="r.value" :label="r.label" :value="r.value" />
       </el-select>
-    </h1>
+    </div>
 
     <el-tabs v-model="activeTab">
       <el-tab-pane label="本月工作日" name="calendar">
@@ -85,10 +87,17 @@ watch(region, () => loadYear(new Date().getFullYear()))
   gap: 8px;
 }
 
+.rest-mode-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .rest-mode-tags {
   display: inline-flex;
   gap: 6px;
-  margin-left: 8px;
 }
 
 .rest-mode-tag {
@@ -97,7 +106,6 @@ watch(region, () => loadYear(new Date().getFullYear()))
 }
 
 .alt-epoch-label {
-  margin-left: 8px;
   font-size: 12px;
   font-weight: normal;
   color: var(--el-text-color-secondary);
@@ -113,7 +121,7 @@ watch(region, () => loadYear(new Date().getFullYear()))
 }
 
 .region-picker {
+  margin-left: auto;
   width: 110px;
-  margin-left: 8px;
 }
 </style>
