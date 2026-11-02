@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useDevice } from '@/composables/useDevice'
+const { isMobile } = useDevice()
 
 defineProps({
   /** 距离下一次版本检查的秒数（由 App.vue 的轮询计时器驱动，PROD 下有意义） */
@@ -20,7 +22,11 @@ const envInfo = computed(() => ({
 </script>
 
 <template>
-  <div class="env-panel" :class="{ expanded }" @click="expanded = !expanded">
+  <div
+    class="env-panel"
+    :class="{ 'is-mobile': isMobile, expanded: expanded }"
+    @click="expanded = !expanded"
+  >
     <div v-if="!expanded" class="env-panel-collapsed">
       <el-tag :type="isProd ? 'warning' : 'success'" size="small" effect="plain">
         {{ isProd ? 'PROD' : 'DEV' }}
@@ -56,6 +62,9 @@ const envInfo = computed(() => ({
   z-index: 9999;
   cursor: pointer;
   user-select: none;
+  &.is-mobile {
+    display: none;
+  }
 }
 
 .env-panel-collapsed {
