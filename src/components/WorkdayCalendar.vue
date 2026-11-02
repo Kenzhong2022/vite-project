@@ -187,8 +187,7 @@ function cellTextClass(dateStr) {
 }
 
 .is-today .day-num {
-  flex: 1;
-  height: 15%;
+  height: 50%;
   aspect-ratio: 1 / 1;
   background: var(--el-color-primary);
   color: #fff;
