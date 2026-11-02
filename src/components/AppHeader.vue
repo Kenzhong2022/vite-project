@@ -34,6 +34,26 @@ function cancelClose() {
   clearTimeout(closeTimer)
 }
 
+/**
+ * 鼠标移出浏览器视口（地址栏/桌面/其他窗口）时，部分浏览器对 nav/panel 的 mouseleave 触发不可靠，
+ * 面板可能一直悬着。监听 documentElement 的 pointerleave/mouseleave（鼠标离开 <html> 即离开文档，
+ * mouseleave 不冒泡、进入子元素不会误触发）+ window 的 mouseout（relatedTarget 为空说明没进入文档内任何元素）兜底。
+ * 判定离开就立即关闭：指针都不在窗口里，150ms 延迟没有意义；重新移入由 onCatEnter 恢复面板。
+ */
+function closePanelNow() {
+  clearTimeout(closeTimer)
+  activeCat.value = null
+}
+function onPointerLeaveWindow() {
+  if (activeCat.value !== null) closePanelNow()
+}
+function onMouseOut(e) {
+  if (!e.relatedTarget && !e.toElement) onPointerLeaveWindow()
+}
+document.documentElement.addEventListener('pointerleave', onPointerLeaveWindow)
+document.documentElement.addEventListener('mouseleave', onPointerLeaveWindow)
+window.addEventListener('mouseout', onMouseOut)
+
 // 面板 top 由 header 实际底边计算（header 是 sticky，bottom 即面板应贴的位置）
 // getBoundingClientRect 返回的是 border box：padding/border 已自动包含，margin 本就不属于元素盒子
 // 在打开面板那一刻现量，滚动导致 sticky 位置变化也不会用到过期值
@@ -52,6 +72,9 @@ function onCatEnter(category) {
 
 onUnmounted(() => {
   clearTimeout(closeTimer)
+  document.documentElement.removeEventListener('pointerleave', onPointerLeaveWindow)
+  document.documentElement.removeEventListener('mouseleave', onPointerLeaveWindow)
+  window.removeEventListener('mouseout', onMouseOut)
 })
 </script>
 
@@ -62,7 +85,7 @@ onUnmounted(() => {
         <div class="app-logo-icon"><img src="/favicon.svg" /></div>
       </div>
       <!-- 电脑端：分类导航，hover 分类展开面板；手机/平板：汉堡按钮 + 抽屉导航 -->
-      <nav v-if="isDesktop" class="app-nav">
+      <nav v-if="isDesktop" class="app-nav" @mouseenter="cancelClose" @mouseleave="scheduleClose">
         <button
           v-for="group in navGroups"
           :key="group.category"
@@ -76,6 +99,7 @@ onUnmounted(() => {
           <el-icon :size="12"><ArrowDown /></el-icon>
         </button>
       </nav>
+      <!-- 手机端：汉堡按钮 + 抽屉导航 -->
       <button
         v-else
         class="nav-burger"
@@ -90,6 +114,8 @@ onUnmounted(() => {
 
   <!-- 导航面板 teleport 到 body：不受 header 层叠上下文限制；top 在打开时按 header 实际底边现量 -->
   <Teleport to="body">
+    <!-- 进出场动画：name 对应样式里的 .nav-panel-enter-*/.nav-panel-leave-* 类，
+         效果为 150ms 的淡入淡出 + 垂直方向 4px 位移（进入时从上方 -4px 滑落，离开时滑回） -->
     <Transition name="nav-panel">
       <div v-if="activeGroup" class="nav-panel" :style="{ top: `${panelTop}px` }">
         <!-- 单一面板：内容随当前 hover 的分类切换 -->
@@ -253,14 +279,14 @@ onUnmounted(() => {
 .nav-panel-enter-active,
 .nav-panel-leave-active {
   transition:
-    opacity 0.15s,
-    transform 0.15s;
+    opacity 0.5s,
+    transform 0.5s;
 }
 
 .nav-panel-enter-from,
 .nav-panel-leave-to {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-15px);
 }
 
 .nav-panel-item {

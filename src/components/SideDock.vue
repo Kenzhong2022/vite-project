@@ -24,22 +24,22 @@ function backToTop() {
 <template>
   <ul class="side-dock">
     <li
-      class="side-dock-brand"
+      class="side-dock-item side-dock-brand"
       :class="{ 'is-active': currentZone === 'notes' }"
       title="回到首页"
       @click="router.push('/')"
     >
-      Vite
+      Note
     </li>
     <li
-      class="side-dock-btn"
+      class="side-dock-item"
       :class="{ 'is-active': currentZone === 'media' }"
       title="图片抠图"
       @click="router.push('/image-cutout')"
     >
       <el-icon :size="18"><Picture /></el-icon>
     </li>
-    <li class="side-dock-btn side-dock-top" title="回到顶部" @click="backToTop">
+    <li class="side-dock-item side-dock-top" title="回到顶部" @click="backToTop">
       <el-icon :size="18"><Top /></el-icon>
     </li>
   </ul>
@@ -67,21 +67,8 @@ function backToTop() {
   color: var(--el-text-color-regular);
 }
 
-.side-dock-brand {
-  padding: 8px 6px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-/* 品牌项域高亮：与功能项一致的 light-9 底色 */
-.side-dock-brand.is-active {
-  color: var(--el-color-primary);
-  background: var(--el-color-primary-light-9);
-}
-
-.side-dock-btn {
+/* 基类：所有 dock 项共用的 32×32 盒子与交互态 */
+.side-dock-item {
   width: 32px;
   height: 32px;
   display: flex;
@@ -94,13 +81,19 @@ function backToTop() {
     background 0.15s;
 }
 
-.side-dock-btn:hover,
-.side-dock-btn.is-active {
+.side-dock-item:hover,
+.side-dock-item.is-active {
   color: var(--el-color-primary);
   background: var(--el-color-primary-light-9);
 }
 
-/* 末项：分隔线拉开与功能项的距离，hover 背景铺满整行，下圆角贴合容器 */
+/* 特化：品牌文字项 */
+.side-dock-brand {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* 特化：末项回到顶部 — 分隔线拉开与功能项的距离，下圆角贴合容器 */
 .side-dock-top {
   width: 100%;
   align-self: stretch;

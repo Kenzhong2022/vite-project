@@ -5,6 +5,9 @@
   - 布局职责全部在 AppLayout（导航、keep-alive、侧边目录）
 -->
 <script setup>
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 import { onMounted, onUnmounted, ref } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue'
 import EnvPanel from '@/components/EnvPanel.vue'
@@ -61,7 +64,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <AppLayout />
-  <SideDock />
-  <EnvPanel :remaining="remaining" />
+  <el-config-provider :locale="zhCn">
+    <AppLayout />
+    <SideDock />
+    <EnvPanel :remaining="remaining" />
+  </el-config-provider>
 </template>

@@ -6,9 +6,10 @@
 // - zone：域归属（'notes' 知识点 | 'media' 媒体工具），SideDock 据此高亮对应的域入口
 import {
   HomeFilled,
+  FolderOpened,
+  Timer,
   Files,
   Lightning,
-  Timer,
   Sort,
   RefreshRight,
   Brush,
@@ -108,6 +109,22 @@ export const navItems = [
     desc: '浏览器本地推理去背景：上传 → 预览 → 下载透明底 PNG',
     category: '媒体',
     zone: 'media',
+  },
+  {
+    to: '/personal-projects',
+    icon: FolderOpened,
+    label: '个人项目',
+    desc: '占位页：后续的个人作品 / 小工具都会归到这里',
+    category: 'Personal Project',
+    zone: 'notes',
+  },
+  {
+    to: '/redeem-countdown',
+    icon: Timer,
+    label: '赎身倒计时',
+    desc: '配置上下班时间与月薪，实时看今日进账与下班倒计时',
+    category: 'Personal Project',
+    zone: 'notes',
   },
   {
     to: '/about',

@@ -81,6 +81,19 @@ const router = createRouter({
       meta: { title: '图片抠图' },
     },
     {
+      path: '/personal-projects',
+      name: 'personal-projects',
+      component: () => import('@/views/PersonalProjects.vue'),
+      // 个人项目页无目录（meta.toc）：sections 只在页面需要侧边目录时才配置
+      meta: { title: '个人项目' },
+    },
+    {
+      path: '/redeem-countdown',
+      name: 'redeem-countdown',
+      component: () => import('@/views/RedeemCountdown.vue'),
+      meta: { title: '赎身倒计时' },
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('@/views/About.vue'),
