@@ -1,5 +1,5 @@
 <!--
-  RedeemCountdown：赎身倒计时页（页面壳：标题 + 休班模式 tag + 双 Tab）
+  OffWorkCountdown：下班倒计时页（页面壳：标题 + 休班模式 tag + 双 Tab）
   - 标题旁 tag 切换休班模式（双休/单休/大小周），useRestMode 模块级共享给两个 Tab
   - Tab 1 WorkdayCalendar「看」当月工作日，Tab 2 SalaryTicker「用」同一份数据算日薪
   - 页面壳预拉当年 holiday-cn 数据：工资 Tab 懒渲染，提前拉好避免切 Tab 才请求
@@ -8,7 +8,7 @@
   <div class="page">
     <h1 class="page-title">
       <el-icon color="var(--el-color-primary)"><Timer /></el-icon>
-      赎身倒计时
+      薪满意足
     </h1>
     <div class="rest-mode-container">
       <span class="rest-mode-tags">
@@ -85,8 +85,8 @@ watch(region, () => loadYear(new Date().getFullYear()))
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'ZCOOL KuaiLe', sans-serif;
-  letter-spacing: 2px;
+  font-size: 36px;
+  font-weight: 400;
 }
 
 .rest-mode-container {

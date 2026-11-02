@@ -3,8 +3,8 @@
 import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 
-const REST_MODE_KEY = 'redeem-rest-mode'
-const ALT_EPOCH_KEY = 'redeem-alt-week-epoch'
+const REST_MODE_KEY = 'off-work-rest-mode'
+const ALT_EPOCH_KEY = 'off-work-alt-week-epoch'
 
 export const REST_MODES = [
   { value: 'double', label: '双休' },

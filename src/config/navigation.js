@@ -119,9 +119,9 @@ export const navItems = [
     zone: 'notes',
   },
   {
-    to: '/redeem-countdown',
+    to: '/off-work-countdown',
     icon: Timer,
-    label: '赎身倒计时',
+    label: '薪满意足',
     desc: '配置上下班时间与月薪，实时看今日进账与下班倒计时',
     category: 'Personal Project',
     zone: 'notes',

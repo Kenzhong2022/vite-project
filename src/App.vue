@@ -70,3 +70,10 @@ onUnmounted(() => {
     <EnvPanel :remaining="remaining" />
   </el-config-provider>
 </template>
+
+<style>
+body {
+  font-family: 'ZCOOL KuaiLe', sans-serif;
+  letter-spacing: 2px;
+}
+</style>

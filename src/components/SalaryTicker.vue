@@ -18,7 +18,7 @@ import { useDevice } from '@/composables/useDevice'
 import SalaryConfigForm from '@/components/SalaryConfigForm.vue'
 import SalaryLivePanel from '@/components/SalaryLivePanel.vue'
 
-const STORAGE_KEY = 'redeem-salary-settings'
+const STORAGE_KEY = 'off-work-salary-settings'
 
 const { loadYear, yearMaps, region } = useHoliday()
 const { isMobile } = useDevice()

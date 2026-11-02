@@ -88,10 +88,10 @@ const router = createRouter({
       meta: { title: '个人项目' },
     },
     {
-      path: '/redeem-countdown',
-      name: 'redeem-countdown',
-      component: () => import('@/views/RedeemCountdown.vue'),
-      meta: { title: '赎身倒计时' },
+      path: '/off-work-countdown',
+      name: 'off-work-countdown',
+      component: () => import('@/views/OffWorkCountdown.vue'),
+      meta: { title: '薪满意足' },
     },
     {
       path: '/about',
