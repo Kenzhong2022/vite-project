@@ -17,6 +17,7 @@ import {
   Histogram,
   Aim,
   Picture,
+  View,
   InfoFilled,
 } from '@element-plus/icons-vue'
 
@@ -107,6 +108,14 @@ export const navItems = [
     icon: Picture,
     label: '图片抠图',
     desc: '浏览器本地推理去背景：上传 → 预览 → 下载透明底 PNG',
+    category: '媒体',
+    zone: 'media',
+  },
+  {
+    to: '/dpr-guide',
+    icon: View,
+    label: 'DPR 设备像素比',
+    desc: '物理像素 vs CSS 像素：canvas HiDPI 失真的根源与修复，附实时 DPR 监测',
     category: '媒体',
     zone: 'media',
   },

@@ -81,6 +81,12 @@ const router = createRouter({
       meta: { title: '图片抠图' },
     },
     {
+      path: '/dpr-guide',
+      name: 'dpr-guide',
+      component: () => import('@/views/media/DprGuide.vue'),
+      meta: { title: 'DPR 设备像素比' },
+    },
+    {
       path: '/personal-projects',
       name: 'personal-projects',
       component: () => import('@/views/PersonalProjects.vue'),
